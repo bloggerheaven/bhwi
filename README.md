@@ -1,2 +1,2 @@
 # bhwi
-Blogger Heaven Instagram Widget
+Blogger Heaven Widget Instagram
