@@ -1,0 +1,31 @@
+{
+  "name": "bhwi",
+  "description": "Blogger Heaven Instagram Widget",
+  "version": "0.0.0",
+  "homepage": "none",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "jquery": "latest"
+  },
+  "keywords": [
+    "instagram widget",
+    "lightweight",
+    "out of box use"
+  ],
+  "authors": [
+    "Cyril Kyburz <hello@blogger-heaven.com> (www.blogger-heaven.com)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:cyrilkyburz/bhwi.git"
+  },
+  "appPath": "src",
+  "main": [
+    "dist/bhwi.min.js"
+  ],
+  "ignore": [
+    "*",
+    "!dist"
+  ]
+}
