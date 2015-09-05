@@ -1,18 +1,41 @@
-class bhwiUser {
-    id: number;
-    name: string;
-    client_id: number;
+/// <reference path="../typings/tsd.d.ts" />
 
-    constructor(name: string, client_id: number) {
-        this.name = name;
-        this.client_id = client_id;
-        this.id = this.getId(name, client_id)
-    }
+class BhwiUser {
+  id: number;
+  client_id: number;
 
-    getId(name: string, client_id: number) {
-      // jQuery get
-      console.log('https://api.instagram.com/v1/users/search?q=' + name + '&client_id=' + client_id);
-      return 1;
-    }
+  constructor(id: number, client_id: number) {
+    this.client_id = client_id;
+    this.id = id;
+  }
 }
 
+class Bhwi {
+  user: BhwiUser;
+
+  constructor(id: number, client_id: number) {
+    this.user = new BhwiUser(id, client_id);
+  }
+
+  getImages() {
+    var url = 'https://api.instagram.com/v1/users/' + this.user.id + '/media/recent/?client_id=' + this.user.client_id + '&callback=?';
+
+    jQuery.getJSON(url).done((instaPosts) => {
+      jQuery.each(instaPosts.data, (index, instaPost) => {
+        this._buildWidget(instaPost.link, instaPost.images.standard_resolution.url).appendTo('body');
+      });
+    });
+  }
+
+  _buildLink(link_url: string) {
+    return jQuery('<a>').attr('href', link_url);
+  }
+
+  _buildImage(image_url: string) {
+    return jQuery('<img>').attr('src', image_url);
+  }
+
+  _buildWidget(link_url: string, image_url: string) {
+    return this._buildLink(link_url).append(this._buildImage(image_url));
+  }
+}
