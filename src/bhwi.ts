@@ -3,10 +3,16 @@
 class BhwiUser {
   id: number;
   client_id: number;
+  url: string;
 
   constructor(id: number, client_id: number) {
     this.client_id = client_id;
     this.id = id;
+    this.url = this._buildUrl()
+  }
+
+  _buildUrl() {
+    return 'https://api.instagram.com/v1/users/' + this.id + '/media/recent/?client_id=' + this.client_id + '&callback=?';
   }
 }
 
@@ -15,14 +21,13 @@ class Bhwi {
 
   constructor(id: number, client_id: number) {
     this.user = new BhwiUser(id, client_id);
+    this._createWidget();
   }
 
-  getImages() {
-    var url = 'https://api.instagram.com/v1/users/' + this.user.id + '/media/recent/?client_id=' + this.user.client_id + '&callback=?';
-
-    jQuery.getJSON(url).done((instaPosts) => {
-      jQuery.each(instaPosts.data, (index, instaPost) => {
-        this._buildWidget(instaPost.link, instaPost.images.standard_resolution.url).appendTo('body');
+  _createWidget() {
+    jQuery.getJSON(this.user.url).done((insta_posts) => {
+      jQuery.each(insta_posts.data, (index, insta_posts) => {
+        this._buildWidget(insta_posts.link, insta_posts.images.standard_resolution.url).appendTo('#bhwi');
       });
     });
   }
