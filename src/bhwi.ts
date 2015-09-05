@@ -33,7 +33,7 @@ class Bhwi {
   }
 
   _buildLink(link_url: string) {
-    return jQuery('<a>').attr('href', link_url);
+    return jQuery('<a>').attr({href: link_url, target: '_blank'});
   }
 
   _buildImage(image_url: string) {
