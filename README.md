@@ -14,6 +14,7 @@ Open index.html in a browser
 git clone git@git.renuo.ch:cyrilkyburz/bhwi.git
 cd bhwi
 npm install bower gulp tsd -g
+npm install
 tsd reinstall --save --overwrite
 ```
 
