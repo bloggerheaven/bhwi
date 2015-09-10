@@ -1,4 +1,18 @@
-#bhwi {
+#bhwi a {
+  height: 100%;
+  display: block;
+  margin: 0 5px; }
+  #bhwi a img {
+    max-height: 100%;
+    max-width: 100%; }
+
+#bhwi.slideshow a {
+  height: 200px;
+  width: 200px;
+  position: absolute;
+  left: 0; }
+
+#bhwi.silderow {
   height: 200px;
   overflow: hidden;
   display: -webkit-box;
@@ -7,10 +21,3 @@
   display: -webkit-flex;
   display: flex;
   justify-content: space-around; }
-  #bhwi a {
-    height: 100%;
-    display: block;
-    margin: 0 5px; }
-    #bhwi a img {
-      max-height: 100%;
-      max-width: 100%; }

@@ -1,20 +1,79 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 class BhwiHelper {
-  _buildLink(link_url: string) {
+  buildLink(link_url: string) {
     return jQuery('<a>').attr({href: link_url, target: '_blank'});
   }
 
-  _buildImage(image_url: string) {
+  buildImage(image_url: string) {
     return jQuery('<img>').attr('src', image_url);
   }
 
-  _buildWidget(link_url: string, image_url: string) {
-    return this._buildLink(link_url).append(this._buildImage(image_url));
+  buildSlide(link_url: string, image_url: string) {
+    return this.buildLink(link_url).append(this.buildImage(image_url));
+  }
+
+  append(jquery_element: any) {
+    jquery_element.appendTo('#bhwi');
+  }
+
+  interval(func: any, delay: number) {
+    func();
+    var func_wrapper = () => { this.interval(func, delay) };
+    setTimeout(func_wrapper, delay);
   }
 }
 
-class BwhiSlider {}
+class BhwiSliderCurrent {
+  position: number;
+  bhwi_image: BhwiImage;
+  jquery_element: any;
+
+  constructor() {
+    this.position = -1; // Hack: find better solution
+  }
+
+  setSliderCurrent(position: number, bhwi_image: BhwiImage, jquery_element: any) {
+    this.position = position;
+    this.bhwi_image = bhwi_image;
+    this.jquery_element = jquery_element;
+  }
+}
+
+class BhwiSlider {
+  bhwi_helper: BhwiHelper;
+  bhwi_images: BhwiImages;
+  bhwi_silder_current: BhwiSliderCurrent;
+
+  constructor(bhwi_helper: BhwiHelper, bhwi_images: BhwiImages) {
+    this.bhwi_silder_current = new BhwiSliderCurrent();
+    this.bhwi_helper = bhwi_helper;
+    this.bhwi_images = bhwi_images;
+    this.bhwi_helper.interval(this._sildeImage, 4000);
+  }
+
+  _setImage(bhwi_image: BhwiImage, position: number) {
+    var jquery_element = $('a[href$="' + bhwi_image.link + '"]');
+
+    if (jquery_element.length) {
+      jquery_element.addClass('current').fadeIn(2000);
+    } else {
+      jquery_element = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.standard).addClass('current').fadeIn(2000);
+      this.bhwi_helper.append(jquery_element);
+    }
+
+    this.bhwi_silder_current.setSliderCurrent(position, bhwi_image, jquery_element);
+  }
+
+  _sildeImage = () => {
+    var next_position = this.bhwi_silder_current.position + 1;
+
+    if (next_position != 0) this.bhwi_silder_current.jquery_element.removeClass('current').fadeOut(2000);
+    if (next_position == this.bhwi_images.images.length) next_position = 0;
+
+    this._setImage(this.bhwi_images.images[next_position], next_position);
+  };
+}
 
 class BhwiImage {
   link: string;
@@ -29,10 +88,10 @@ class BhwiImage {
 }
 
 class BhwiImages {
-  images: BhwiImage[];
+  images: Array<BhwiImage>;
 
   constructor() {
-    this.images = new Array;
+    this.images = new Array<BhwiImage>();
   }
 
   addImage(image: BhwiImage) {
@@ -63,19 +122,26 @@ class BhwiUser {
 class Bhwi {
   bhwi_user: BhwiUser;
   bhwi_images: BhwiImages;
+  bhwi_helper: BhwiHelper;
+  bhwi_silder: BhwiSlider;
 
   constructor(id: number, client_id: number) {
+    this.bhwi_helper = new BhwiHelper();
     this.bhwi_user = new BhwiUser(id, client_id);
     this.bhwi_images = new BhwiImages;
-    this._fillBhwiImages();
-    console.log(this.bhwi_images);
+    this._fillBhwiImages(this._initBhwiSlider);
   }
 
-  _fillBhwiImages() {
+  _initBhwiSlider = () => {
+    this.bhwi_silder = new BhwiSlider(this.bhwi_helper, this.bhwi_images)
+  };
+
+  _fillBhwiImages(callback: any) {
     jQuery.getJSON(this.bhwi_user.url).done((insta_posts) => {
       jQuery.each(insta_posts.data, (index, insta_posts) => {
         this.bhwi_images.addBuildImage(insta_posts.link, insta_posts.images.standard_resolution.url, insta_posts.images.thumbnail.url);
       });
+      callback();
     });
   }
 }

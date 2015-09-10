@@ -1,12 +1,4 @@
 #bhwi {
-  height: 200px;
-  overflow: hidden;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  justify-content: space-around;
   a {
     height: 100%;
     display: block;
@@ -15,5 +7,23 @@
       max-height: 100%;
       max-width: 100%;
     }
+  }
+  &.slideshow {
+    a {
+      height: 200px;
+      width: 200px;
+      position: absolute;
+      left: 0;
+    }
+  }
+  &.silderow {
+    height: 200px;
+    overflow: hidden;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: space-around;
   }
 }
