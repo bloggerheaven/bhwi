@@ -7,8 +7,9 @@ class BhwiOptions {
     var default_options = {
       dom_element: 'bhwi', // any id
       type: 'instagram', // or bhwi
-      speed: 4000, // ms
+      speed: 4000, // ms (only for silder)
       form: 'timeline', // or slider
+      images_number: 8, // only for timeline
       lightbox: true
       // url: 'api-url' // if type: 'bhwi'
       // client_id: '1234' // if type: 'instagram'
@@ -84,21 +85,23 @@ class BhwiSliderCurrent {
 class BhwiSlider {
   bhwi_helper: BhwiHelper;
   bhwi_images: BhwiImages;
+  bhwi_options: BhwiOptions;
   bhwi_silder_current: BhwiSliderCurrent;
   speed: number;
 
-  constructor(bhwi_helper: BhwiHelper, bhwi_images: BhwiImages, speed: number) {
+  constructor(bhwi_helper: BhwiHelper, bhwi_images: BhwiImages, bhwi_options: BhwiOptions) {
     this.bhwi_silder_current = new BhwiSliderCurrent();
     this.bhwi_helper = bhwi_helper;
     this.bhwi_images = bhwi_images;
-    this.speed = speed;
+    this.bhwi_options = bhwi_options;
+    this.speed = this.bhwi_options.options.speed;
     this.bhwi_helper.interval(this._sildeImage, this.speed);
 
     this.bhwi_helper.dom_element.addClass('bhwi-slider')
   }
 
   _setImage(bhwi_image: BhwiImage, position: number) {
-    var jquery_element = $('a[href$="' + bhwi_image.link + '"]');
+    var jquery_element = jQuery('a[href$="' + bhwi_image.link + '"]');
 
     if (jquery_element.length) {
       jquery_element.addClass('current').fadeIn(this.speed / 2);
@@ -118,6 +121,45 @@ class BhwiSlider {
 
     this._setImage(this.bhwi_images.images[next_position], next_position);
   };
+}
+
+class BhwiTimeline {
+  bhwi_helper: BhwiHelper;
+  bhwi_images: BhwiImages;
+  bhwi_options: BhwiOptions;
+
+  constructor(bhwi_helper: BhwiHelper, bhwi_images: BhwiImages, bhwi_options: BhwiOptions) {
+    this.bhwi_helper = bhwi_helper;
+    this.bhwi_images = bhwi_images;
+    this.bhwi_options = bhwi_options;
+
+    this.bhwi_helper.dom_element.addClass('bhwi-timeline');
+    this._setAllImages();
+    this._responsiveImages();
+  }
+
+  _setAllImages () {
+    var loaded_images = 0;
+    jQuery.each(this.bhwi_images.images, (index: number, bhwi_image: BhwiImage) => {
+      var image_wrapper = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.standard);
+      this.bhwi_helper.append(image_wrapper);
+      jQuery(image_wrapper).find('img').on('load', () => {
+        loaded_images++;
+        if (loaded_images == this.bhwi_options.options.images_number) { this._resizeImages(); }
+      });
+      if (index == (this.bhwi_options.options.images_number - 1)) return false;
+    });
+  }
+
+  _resizeImages () {
+    var images = jQuery(this.bhwi_helper.dom_element).find('img');
+    images.height('auto');
+    images.height(images.height());
+  }
+
+  _responsiveImages () {
+    $(window).resize( () => { this._resizeImages() });
+  }
 }
 
 class BhwiImage {
@@ -177,11 +219,12 @@ class BhwiUser {
 }
 
 class Bhwi {
+  bhwi_options: BhwiOptions;
+  bhwi_helper: BhwiHelper;
   bhwi_user: BhwiUser;
   bhwi_images: BhwiImages;
-  bhwi_helper: BhwiHelper;
   bhwi_silder: BhwiSlider;
-  bhwi_options: BhwiOptions;
+  bhwi_timeline: BhwiTimeline;
 
   constructor(id: number, options: any) {
     this._basicVaildation(id, options);
@@ -189,21 +232,35 @@ class Bhwi {
     this.bhwi_helper = new BhwiHelper(this.bhwi_options.options.dom_element);
     this.bhwi_user = new BhwiUser(id, this.bhwi_options);
     this.bhwi_images = new BhwiImages;
-    this._fillBhwiImages(this._initBhwiSlider);
+    this._callApi();
   }
 
   _initBhwiSlider = () => {
-    this.bhwi_silder = new BhwiSlider(this.bhwi_helper, this.bhwi_images, this.bhwi_options.options.speed)
+    this.bhwi_silder = new BhwiSlider(this.bhwi_helper, this.bhwi_images, this.bhwi_options)
   };
 
-  _fillBhwiImages(callback: any) {
+  _initBhwiTimeline = () => {
+    this.bhwi_timeline = new BhwiTimeline(this.bhwi_helper, this.bhwi_images, this.bhwi_options)
+  };
+
+  _decideInit = function () {
+    switch(this.bhwi_options.options.form) {
+      case 'slider':
+        this._initBhwiSlider();
+        break;
+      default:
+        this._initBhwiTimeline();
+    }
+  };
+
+  _callApi() {
     jQuery.getJSON(this.bhwi_user.url).done((insta_posts) => {
       jQuery.each(insta_posts.data, (index, insta_posts) => {
         this.bhwi_images.addBuildImage(insta_posts.link, insta_posts.images.standard_resolution.url,
           insta_posts.images.thumbnail.url, insta_posts.user.username,
           this.bhwi_helper.nullTry (insta_posts.caption, 'text'), insta_posts.created_time);
       });
-      callback();
+      this._decideInit();
     });
   }
 
