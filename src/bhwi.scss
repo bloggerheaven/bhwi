@@ -1,4 +1,4 @@
-#bhwi {
+.bhwi {
   a {
     height: 100%;
     display: block;
@@ -8,7 +8,7 @@
       max-width: 100%;
     }
   }
-  &.slideshow {
+  &.bhwi-slider {
     a {
       height: 200px;
       width: 200px;
@@ -16,7 +16,7 @@
       left: 0;
     }
   }
-  &.silderow {
+  &.bhwi-slider {
     height: 200px;
     overflow: hidden;
     display: -webkit-box;

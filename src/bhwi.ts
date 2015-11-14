@@ -1,6 +1,12 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 class BhwiHelper {
+  dom_element: any;
+
+  constructor(dom_element: string) {
+    this.dom_element = jQuery('#' + dom_element).addClass('bhwi');
+  }
+
   buildLink(link_url: string) {
     return jQuery('<a>').attr({href: link_url, target: '_blank'});
   }
@@ -14,7 +20,7 @@ class BhwiHelper {
   }
 
   append(jquery_element: any) {
-    jquery_element.appendTo('#bhwi');
+    jquery_element.appendTo(this.dom_element);
   }
 
   interval(func: any, delay: number) {
@@ -60,6 +66,8 @@ class BhwiSlider {
     this.bhwi_images = bhwi_images;
     this.speed = speed;
     this.bhwi_helper.interval(this._sildeImage, this.speed);
+
+    this.bhwi_helper.dom_element.addClass('bhwi-slider')
   }
 
   _setImage(bhwi_image: BhwiImage, position: number) {
@@ -141,8 +149,8 @@ class Bhwi {
   bhwi_helper: BhwiHelper;
   bhwi_silder: BhwiSlider;
 
-  constructor(id: number, client_id: number) {
-    this.bhwi_helper = new BhwiHelper();
+  constructor(id: number, client_id: number, dom_element: string = 'bhwi') {
+    this.bhwi_helper = new BhwiHelper(dom_element);
     this.bhwi_user = new BhwiUser(id, client_id);
     this.bhwi_images = new BhwiImages;
     this._fillBhwiImages(this._initBhwiSlider);
