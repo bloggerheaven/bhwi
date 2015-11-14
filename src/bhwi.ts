@@ -207,7 +207,7 @@ class Bhwi {
     });
   }
 
-  _basicVaildation(id, options) {
+  _basicVaildation(id: any, options: any) {
     if (id == null) { throw new Error('The param "id" is required.') }
     if (options == null) { throw new Error('The param "options" are required.') }
   }
