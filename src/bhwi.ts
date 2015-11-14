@@ -22,6 +22,14 @@ class BhwiHelper {
     var func_wrapper = () => { this.interval(func, delay) };
     setTimeout(func_wrapper, delay);
   }
+
+  nullTry(object: any, key: string) {
+    if (object == null) {
+      return null
+    } else {
+      return object[key]
+    }
+  }
 }
 
 class BhwiSliderCurrent {
@@ -79,11 +87,17 @@ class BhwiImage {
   link: string;
   standard: string;
   thumbnail: string;
+  author: string;
+  text: string;
+  created_time: number;
 
-  constructor(link: string, standard: string, thumbnail: string) {
+  constructor(link: string, standard: string, thumbnail: string, author: string, text: string, created_time: number) {
     this.link = link;
     this.standard = standard;
     this.thumbnail = thumbnail;
+    this.author = author;
+    this.text = text;
+    this.created_time = created_time;
   }
 }
 
@@ -98,8 +112,8 @@ class BhwiImages {
     this.images.push(image);
   }
 
-  addBuildImage(link: string, standard: string, thumbnail: string) {
-    this.addImage(new BhwiImage(link, standard, thumbnail));
+  addBuildImage(link: string, standard: string, thumbnail: string, author: string, text: string, created_time: number) {
+    this.addImage(new BhwiImage(link, standard, thumbnail, author, text, created_time));
   }
 }
 
@@ -139,7 +153,9 @@ class Bhwi {
   _fillBhwiImages(callback: any) {
     jQuery.getJSON(this.bhwi_user.url).done((insta_posts) => {
       jQuery.each(insta_posts.data, (index, insta_posts) => {
-        this.bhwi_images.addBuildImage(insta_posts.link, insta_posts.images.standard_resolution.url, insta_posts.images.thumbnail.url);
+        this.bhwi_images.addBuildImage(insta_posts.link, insta_posts.images.standard_resolution.url,
+          insta_posts.images.thumbnail.url, insta_posts.user.username,
+          this.bhwi_helper.nullTry (insta_posts.caption, 'text'), insta_posts.created_time);
       });
       callback();
     });
