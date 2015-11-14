@@ -52,21 +52,23 @@ class BhwiSlider {
   bhwi_helper: BhwiHelper;
   bhwi_images: BhwiImages;
   bhwi_silder_current: BhwiSliderCurrent;
+  speed: number;
 
-  constructor(bhwi_helper: BhwiHelper, bhwi_images: BhwiImages) {
+  constructor(bhwi_helper: BhwiHelper, bhwi_images: BhwiImages, speed: number) {
     this.bhwi_silder_current = new BhwiSliderCurrent();
     this.bhwi_helper = bhwi_helper;
     this.bhwi_images = bhwi_images;
-    this.bhwi_helper.interval(this._sildeImage, 4000);
+    this.speed = speed;
+    this.bhwi_helper.interval(this._sildeImage, this.speed);
   }
 
   _setImage(bhwi_image: BhwiImage, position: number) {
     var jquery_element = $('a[href$="' + bhwi_image.link + '"]');
 
     if (jquery_element.length) {
-      jquery_element.addClass('current').fadeIn(2000);
+      jquery_element.addClass('current').fadeIn(this.speed / 2);
     } else {
-      jquery_element = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.standard).addClass('current').fadeIn(2000);
+      jquery_element = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.standard).addClass('current').fadeIn(this.speed / 2);
       this.bhwi_helper.append(jquery_element);
     }
 
@@ -76,7 +78,7 @@ class BhwiSlider {
   _sildeImage = () => {
     var next_position = this.bhwi_silder_current.position + 1;
 
-    if (next_position != 0) this.bhwi_silder_current.jquery_element.removeClass('current').fadeOut(2000);
+    if (next_position != 0) this.bhwi_silder_current.jquery_element.removeClass('current').fadeOut(this.speed / 2);
     if (next_position == this.bhwi_images.images.length) next_position = 0;
 
     this._setImage(this.bhwi_images.images[next_position], next_position);
@@ -147,7 +149,7 @@ class Bhwi {
   }
 
   _initBhwiSlider = () => {
-    this.bhwi_silder = new BhwiSlider(this.bhwi_helper, this.bhwi_images)
+    this.bhwi_silder = new BhwiSlider(this.bhwi_helper, this.bhwi_images, 4000)
   };
 
   _fillBhwiImages(callback: any) {
