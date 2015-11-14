@@ -7,7 +7,10 @@
 <script src='../tmp/bhwi.js'></script>
 <script>
   (function() {
-    new Bhwi('2027952057', '47161c3eb4e9458380ed857e6041a515')
+    // With the instagram api
+    new Bhwi('2027952057', {client_id: '47161c3eb4e9458380ed857e6041a515'});
+    // With the bhwi (proxy) api
+    // new Bhwi('2027952057', {url: 'http://127.0.0.1:5000/recent_images/', type: 'bhwi'});
   }).call(this);
 </script>
 </body>

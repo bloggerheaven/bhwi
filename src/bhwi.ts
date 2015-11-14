@@ -1,5 +1,32 @@
 /// <reference path="../typings/tsd.d.ts" />
 
+class BhwiOptions {
+  options: any;
+
+  constructor(bhwi_options: any) {
+    var default_options = {
+      dom_element: 'bhwi', // any id
+      type: 'instagram', // or bhwi
+      speed: 4000, // ms
+      form: 'timeline', // or slider
+      lightbox: true
+      // url: 'api-url' // if type: 'bhwi'
+      // client_id: '1234' // if type: 'instagram'
+    };
+
+    this.options = jQuery.extend(default_options, bhwi_options);
+    this._validateOptions();
+  }
+
+  _validateOptions () {
+    if (this.options.type == 'instagram') {
+      if (this.options.client_id == null) { throw new Error('For the instagram API the "client_id" is needed.') }
+    } else  {
+      if (this.options.url == null) { throw new Error('For the bhwi API the "url" is needed.') }
+    }
+  }
+}
+
 class BhwiHelper {
   dom_element: any;
 
@@ -129,17 +156,23 @@ class BhwiImages {
 
 class BhwiUser {
   id: number;
-  client_id: number;
   url: string;
 
-  constructor(id: number, client_id: number) {
-    this.client_id = client_id;
+  constructor(id: number, bhwi_options: BhwiOptions) {
     this.id = id;
-    this.url = this._buildUrl();
+    if ('bhwi' === bhwi_options.options.type) {
+      this.url = this._buildBhwiUrl(bhwi_options.options.url);
+    } else {
+      this.url = this._buildInstagramUrl(bhwi_options.options.client_id);
+    }
   }
 
-  _buildUrl() {
-    return 'https://api.instagram.com/v1/users/' + this.id + '/media/recent/?client_id=' + this.client_id + '&callback=?';
+  _buildInstagramUrl(client_id: string) {
+    return 'https://api.instagram.com/v1/users/' + this.id + '/media/recent/?client_id=' + client_id + '&callback=?';
+  }
+
+  _buildBhwiUrl(url: string) {
+    return url + this.id
   }
 }
 
@@ -148,16 +181,19 @@ class Bhwi {
   bhwi_images: BhwiImages;
   bhwi_helper: BhwiHelper;
   bhwi_silder: BhwiSlider;
+  bhwi_options: BhwiOptions;
 
-  constructor(id: number, client_id: number, dom_element: string = 'bhwi') {
-    this.bhwi_helper = new BhwiHelper(dom_element);
-    this.bhwi_user = new BhwiUser(id, client_id);
+  constructor(id: number, options: any) {
+    this._basicVaildation(id, options);
+    this.bhwi_options = new BhwiOptions(options);
+    this.bhwi_helper = new BhwiHelper(this.bhwi_options.options.dom_element);
+    this.bhwi_user = new BhwiUser(id, this.bhwi_options);
     this.bhwi_images = new BhwiImages;
     this._fillBhwiImages(this._initBhwiSlider);
   }
 
   _initBhwiSlider = () => {
-    this.bhwi_silder = new BhwiSlider(this.bhwi_helper, this.bhwi_images, 4000)
+    this.bhwi_silder = new BhwiSlider(this.bhwi_helper, this.bhwi_images, this.bhwi_options.options.speed)
   };
 
   _fillBhwiImages(callback: any) {
@@ -169,5 +205,10 @@ class Bhwi {
       });
       callback();
     });
+  }
+
+  _basicVaildation(id, options) {
+    if (id == null) { throw new Error('The param "id" is required.') }
+    if (options == null) { throw new Error('The param "options" are required.') }
   }
 }
