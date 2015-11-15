@@ -28,6 +28,7 @@
     }
   }
 }
+
 .bhwi-lightbox {
   display: none;
   z-index: 1000;
@@ -51,7 +52,7 @@
       float: left;
 
       * {
-        max-width:100%;
+        max-width: 100%;
       }
     }
     .bhwi-image-section {
@@ -59,6 +60,20 @@
     }
     .bhwi-text-section {
       width: 34%;
+    }
+  }
+}
+
+.bhwi-icon {
+  width: 20px;
+  height: 20px;
+  g {
+    stroke: rgba(0,0,0,0.5);
+    fill: none;
+  }
+  &:hover {
+    g {
+      stroke: rgba(0, 0, 0, 1);
     }
   }
 }

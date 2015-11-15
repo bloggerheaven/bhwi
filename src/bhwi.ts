@@ -47,6 +47,26 @@ class BhwiHelper {
     return this.buildLink(link_url).append(this.buildImage(image_id, image_url));
   }
 
+  buildIcon(paths: any) {
+    var g = jQuery('<g>');
+    jQuery.each(paths, function(index, path) {
+      g.append(jQuery('<p>').attr('d', path));
+    });
+    return jQuery('<svg>').addClass('bhwi-icon').attr({version: '1.1', xmlns: 'http://www.w3.org/2000/svg'}).append(g);
+  }
+
+  buildCrossIcon() {
+    return this.buildIcon(['M0,0l20,20', 'M20,0l-20,20']);
+  }
+
+  buildLeftAngleIcon() {
+    return this.buildIcon(['M15,0l-10,10l10,10']);
+  }
+
+  buildRightAngleIcon() {
+    return this.buildIcon(['M5,0l10,10l-10,10']);
+  }
+
   append(jquery_element: any) {
     jquery_element.appendTo(this.dom_element);
   }
