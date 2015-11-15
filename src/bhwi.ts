@@ -39,12 +39,12 @@ class BhwiHelper {
     return jQuery('<a>').attr({href: link_url, target: '_blank'});
   }
 
-  buildImage(image_url: string) {
-    return jQuery('<img>').attr('src', image_url);
+  buildImage(image_id: number, image_url: string) {
+    return jQuery('<img>').attr('src', image_url).addClass('bhwi-image').data('bhwi-image-id', image_id);
   }
 
-  buildSlide(link_url: string, image_url: string) {
-    return this.buildLink(link_url).append(this.buildImage(image_url));
+  buildSlide(link_url: string, image_id: number, image_url: string) {
+    return this.buildLink(link_url).append(this.buildImage(image_id, image_url));
   }
 
   append(jquery_element: any) {
@@ -59,7 +59,7 @@ class BhwiHelper {
 
   nullTry(object: any, key: string) {
     if (object == null) {
-      return null
+      return object
     } else {
       return object[key]
     }
@@ -106,7 +106,7 @@ class BhwiSlider {
     if (jquery_element.length) {
       jquery_element.addClass('current').fadeIn(this.speed / 2);
     } else {
-      jquery_element = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.low).addClass('current').fadeIn(this.speed / 2);
+      jquery_element = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.id, bhwi_image.low).addClass('current').fadeIn(this.speed / 2);
       this.bhwi_helper.append(jquery_element);
     }
 
@@ -141,7 +141,7 @@ class BhwiTimeline {
   _setAllImages () {
     var loaded_images = 0;
     jQuery.each(this.bhwi_images.images, (index: number, bhwi_image: BhwiImage) => {
-      var image_wrapper = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.low);
+      var image_wrapper = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.id, bhwi_image.low);
       this.bhwi_helper.append(image_wrapper);
       jQuery(image_wrapper).find('img').on('load', () => {
         loaded_images++;
@@ -165,20 +165,47 @@ class BhwiTimeline {
 class BhwiLightbox {
   bhwi_helper: BhwiHelper;
   bhwi_options: BhwiOptions;
+  bhwi_images: BhwiImages;
   dom_element: any;
 
-  constructor(bhwi_helper: BhwiHelper, bhwi_options: BhwiOptions) {
+  constructor(bhwi_helper: BhwiHelper, bhwi_options: BhwiOptions, bhwi_images: BhwiImages) {
     this.bhwi_helper = bhwi_helper;
     this.bhwi_options = bhwi_options;
+    this.bhwi_images = bhwi_images;
     this._buildLightbox();
   }
 
-  _buildLightbox () {
+  _buildLightbox() {
     var image_section = jQuery('<div>').addClass('bhwi-image-section');
     var text_section = jQuery('<div>').addClass('bhwi-text-section');
     var content = jQuery('<div>').addClass('bhwi-content');
     var lightbox = jQuery('<div>').addClass('bhwi-lightbox').attr('id', 'bhwi-lightbox');
     this.dom_element = lightbox.append(content.append(image_section, text_section)).appendTo('body');
+    this._addLightboxListener();
+  }
+
+  _addLightboxListener() {
+    jQuery('.bhwi-image').click((event) => {
+      event.preventDefault();
+      this._addImageToLightbox(this.bhwi_images.find(jQuery(event.target).data('bhwi-image-id')));
+    });
+    this.dom_element.click((event) => {
+      if (! jQuery(event.target).closest('.bhwi-content').length) {
+        this.dom_element.fadeOut();
+      }
+    });
+  }
+
+  _addImageToLightbox(bhwi_image: BhwiImage) {
+    var bhwi_image_section = this.dom_element.find('.bhwi-image-section');
+    bhwi_image_section.empty();
+    bhwi_image_section.append(this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.id, bhwi_image.standard));
+
+    var bhwi_text_section = this.dom_element.find('.bhwi-text-section'); // TODO: implement correct structure
+    bhwi_text_section.empty();
+    bhwi_text_section.append(bhwi_image.text);
+
+    this.dom_element.fadeIn();
   }
 }
 
@@ -217,6 +244,10 @@ class BhwiImages {
 
   addBuildImage(link: string, standard: string, low: string, thumbnail: string, author: string, text: string, created_time: number) {
     this.addImage(new BhwiImage(this.images.length, link, standard, low, thumbnail, author, text, created_time));
+  }
+
+  find(id: number) {
+    return this.images[id];
   }
 }
 
@@ -274,6 +305,9 @@ class Bhwi {
         break;
       default:
         this._initBhwiTimeline();
+    }
+    if (this.bhwi_options.options.lightbox) {
+      new BhwiLightbox(this.bhwi_helper, this.bhwi_options, this.bhwi_images)
     }
   };
 

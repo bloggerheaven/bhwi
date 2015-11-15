@@ -38,17 +38,27 @@
   left: 0;
   background-color: rgba(0, 0, 0, 0.6);
   text-align: center;
+
   .bhwi-content {
     display: inline-block;
     z-index: 1111;
     position: relative;
     background-color: #ffffff;
     margin-top: 100px;
+    width: 1000px;
 
     .bhwi-image-section, .bhwi-text-section {
+      float: left;
+
       * {
         max-width:100%;
       }
+    }
+    .bhwi-image-section {
+      width: 66%;
+    }
+    .bhwi-text-section {
+      width: 34%;
     }
   }
 }
