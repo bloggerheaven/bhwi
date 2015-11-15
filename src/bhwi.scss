@@ -28,3 +28,27 @@
     }
   }
 }
+.bhwi-lightbox {
+  display: none;
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  text-align: center;
+  .bhwi-content {
+    display: inline-block;
+    z-index: 1111;
+    position: relative;
+    background-color: #ffffff;
+    margin-top: 100px;
+
+    .bhwi-image-section, .bhwi-text-section {
+      * {
+        max-width:100%;
+      }
+    }
+  }
+}

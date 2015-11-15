@@ -162,6 +162,26 @@ class BhwiTimeline {
   }
 }
 
+class BhwiLightbox {
+  bhwi_helper: BhwiHelper;
+  bhwi_options: BhwiOptions;
+  dom_element: any;
+
+  constructor(bhwi_helper: BhwiHelper, bhwi_options: BhwiOptions) {
+    this.bhwi_helper = bhwi_helper;
+    this.bhwi_options = bhwi_options;
+    this._buildLightbox();
+  }
+
+  _buildLightbox () {
+    var image_section = jQuery('<div>').addClass('bhwi-image-section');
+    var text_section = jQuery('<div>').addClass('bhwi-text-section');
+    var content = jQuery('<div>').addClass('bhwi-content');
+    var lightbox = jQuery('<div>').addClass('bhwi-lightbox').attr('id', 'bhwi-lightbox');
+    this.dom_element = lightbox.append(content.append(image_section, text_section)).appendTo('body');
+  }
+}
+
 class BhwiImage {
   link: string;
   standard: string;
