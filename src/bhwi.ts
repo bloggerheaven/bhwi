@@ -106,7 +106,7 @@ class BhwiSlider {
     if (jquery_element.length) {
       jquery_element.addClass('current').fadeIn(this.speed / 2);
     } else {
-      jquery_element = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.standard).addClass('current').fadeIn(this.speed / 2);
+      jquery_element = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.low).addClass('current').fadeIn(this.speed / 2);
       this.bhwi_helper.append(jquery_element);
     }
 
@@ -141,7 +141,7 @@ class BhwiTimeline {
   _setAllImages () {
     var loaded_images = 0;
     jQuery.each(this.bhwi_images.images, (index: number, bhwi_image: BhwiImage) => {
-      var image_wrapper = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.standard);
+      var image_wrapper = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.low);
       this.bhwi_helper.append(image_wrapper);
       jQuery(image_wrapper).find('img').on('load', () => {
         loaded_images++;
@@ -165,14 +165,16 @@ class BhwiTimeline {
 class BhwiImage {
   link: string;
   standard: string;
+  low: string;
   thumbnail: string;
   author: string;
   text: string;
   created_time: number;
 
-  constructor(link: string, standard: string, thumbnail: string, author: string, text: string, created_time: number) {
+  constructor(link: string, standard: string, low: string, thumbnail: string, author: string, text: string, created_time: number) {
     this.link = link;
     this.standard = standard;
+    this.low = low;
     this.thumbnail = thumbnail;
     this.author = author;
     this.text = text;
@@ -191,8 +193,8 @@ class BhwiImages {
     this.images.push(image);
   }
 
-  addBuildImage(link: string, standard: string, thumbnail: string, author: string, text: string, created_time: number) {
-    this.addImage(new BhwiImage(link, standard, thumbnail, author, text, created_time));
+  addBuildImage(link: string, standard: string, low: string, thumbnail: string, author: string, text: string, created_time: number) {
+    this.addImage(new BhwiImage(link, standard, low, thumbnail, author, text, created_time));
   }
 }
 
@@ -257,7 +259,7 @@ class Bhwi {
     jQuery.getJSON(this.bhwi_user.url).done((insta_posts) => {
       jQuery.each(insta_posts.data, (index, insta_posts) => {
         this.bhwi_images.addBuildImage(insta_posts.link, insta_posts.images.standard_resolution.url,
-          insta_posts.images.thumbnail.url, insta_posts.user.username,
+          insta_posts.images.low_resolution.url, insta_posts.images.thumbnail.url, insta_posts.user.username,
           this.bhwi_helper.nullTry (insta_posts.caption, 'text'), insta_posts.created_time);
       });
       this._decideInit();
