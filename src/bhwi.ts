@@ -183,6 +183,7 @@ class BhwiLightbox {
 }
 
 class BhwiImage {
+  id: number;
   link: string;
   standard: string;
   low: string;
@@ -191,7 +192,8 @@ class BhwiImage {
   text: string;
   created_time: number;
 
-  constructor(link: string, standard: string, low: string, thumbnail: string, author: string, text: string, created_time: number) {
+  constructor(id: number, link: string, standard: string, low: string, thumbnail: string, author: string, text: string, created_time: number) {
+    this.id = id;
     this.link = link;
     this.standard = standard;
     this.low = low;
@@ -214,7 +216,7 @@ class BhwiImages {
   }
 
   addBuildImage(link: string, standard: string, low: string, thumbnail: string, author: string, text: string, created_time: number) {
-    this.addImage(new BhwiImage(link, standard, low, thumbnail, author, text, created_time));
+    this.addImage(new BhwiImage(this.images.length, link, standard, low, thumbnail, author, text, created_time));
   }
 }
 
