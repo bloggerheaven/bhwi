@@ -48,18 +48,19 @@ class BhwiHelper {
   }
 
   buildDescription(link_url: string, author: string, text: string, created_time: number) {
+    var nav = jQuery('<div>').addClass('bhwi-navigation').append(this.buildLeftAngleIcon()).append(this.buildRightAngleIcon());
     var p = jQuery('<p>').text(text);
     var link = this.buildLink(link_url).text(author);
-    var span = jQuery('<span>').text(created_time);
-    return jQuery('<div>').addClass('bhwi-text-section').append([p, link, span]);
+    var span = jQuery('<span>').text(this.shortDateFormat(new Date(created_time * 1000)));
+    return [nav, p, link, span];
   }
 
   buildIcon(paths: any) {
-    var g = jQuery('<g>');
+    var icon = '';
     jQuery.each(paths, function(index, path) {
-      g.append(jQuery('<p>').attr('d', path));
+      icon += '<path d="'+path+'"></path>';
     });
-    return jQuery('<svg>').addClass('bhwi-icon').attr({version: '1.1', xmlns: 'http://www.w3.org/2000/svg'}).append(g);
+    return jQuery('<svg class="bhwi-icon" version="1.1" xmlns="http://www.w3.org/2000/svg"><g>'+icon+'</g></svg>');
   }
 
   buildCrossIcon() {
@@ -90,6 +91,10 @@ class BhwiHelper {
     } else {
       return object[key]
     }
+  }
+
+  shortDateFormat(date: Date) {
+    return date.getDate()+"."+(date.getMonth()+1)+"."+date.getFullYear()
   }
 }
 
