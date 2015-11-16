@@ -10,7 +10,8 @@ class BhwiOptions {
       speed: 4000, // ms (only for silder)
       form: 'timeline', // or slider
       images_number: 8, // only for timeline
-      lightbox: true
+      lightbox: true,
+      preloading_images: true,
       // url: 'api-url' // if type: 'bhwi'
       // client_id: '1234' // if type: 'instagram'
     };
@@ -293,6 +294,14 @@ class BhwiImages {
   find(id: number) {
     return this.images[id];
   }
+
+  preloadingImages() {
+    var preload_img = new Image();
+    jQuery.each(this.images, function (index: number, image: BhwiImage) {
+      preload_img.src = image.low;
+      preload_img.src = image.standard;
+    });
+  }
 }
 
 class BhwiUser {
@@ -361,6 +370,7 @@ class Bhwi {
         this.bhwi_images.addBuildImage(insta_posts.link, insta_posts.images.standard_resolution.url,
           insta_posts.images.low_resolution.url, insta_posts.images.thumbnail.url, insta_posts.user.username,
           this.bhwi_helper.nullTry (insta_posts.caption, 'text'), insta_posts.created_time);
+        if (this.bhwi_options.options.preloading_images) { this.bhwi_images.preloadingImages(); }
       });
       this._decideInit();
     });
