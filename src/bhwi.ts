@@ -104,59 +104,42 @@ class BhwiHelper {
   }
 }
 
-class BhwiSliderCurrent {
-  position: number;
-  bhwi_image: BhwiImage;
-  jquery_element: any;
-
-  constructor() {
-    this.position = -1; // Hack: find better solution
-  }
-
-  setSliderCurrent(position: number, bhwi_image: BhwiImage, jquery_element: any) {
-    this.position = position;
-    this.bhwi_image = bhwi_image;
-    this.jquery_element = jquery_element;
-  }
-}
-
 class BhwiSlider {
   bhwi_helper: BhwiHelper;
   bhwi_images: BhwiImages;
   bhwi_options: BhwiOptions;
-  bhwi_silder_current: BhwiSliderCurrent;
+  current_image: BhwiImage;
+  current_dom: any;
   speed: number;
 
   constructor(bhwi_helper: BhwiHelper, bhwi_images: BhwiImages, bhwi_options: BhwiOptions) {
-    this.bhwi_silder_current = new BhwiSliderCurrent();
     this.bhwi_helper = bhwi_helper;
     this.bhwi_images = bhwi_images;
     this.bhwi_options = bhwi_options;
+    this.current_image = this.bhwi_images.find(0);
     this.speed = this.bhwi_options.options.speed;
     this.bhwi_helper.interval(this._sildeImage, this.speed);
     this.bhwi_helper.dom_element.addClass('bhwi-slider');
   }
 
-  _setImage(bhwi_image: BhwiImage, position: number) {
-    var jquery_element = jQuery('a[href$="' + bhwi_image.link + '"]');
+  _setImage(bhwi_image: BhwiImage) {
+    if (this.current_dom != null) { this.current_dom.fadeOut(this.speed / 2); }
+    this.current_dom = this.bhwi_helper.dom_element.find('.bhwi-image:eq('+bhwi_image.id+')').parent();
 
-    if (jquery_element.length) {
-      jquery_element.addClass('current').fadeIn(this.speed / 2);
+    if (this.current_dom.length) {
+      this.current_dom.fadeIn(this.speed / 2);
     } else {
-      jquery_element = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.id, bhwi_image.low).addClass('current').fadeIn(this.speed / 2);
-      this.bhwi_helper.append(jquery_element);
+      this.current_dom = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.id, bhwi_image.low).fadeIn(this.speed / 2);
+      this.bhwi_helper.append(this.current_dom);
     }
 
-    this.bhwi_silder_current.setSliderCurrent(position, bhwi_image, jquery_element);
+    this.current_image = bhwi_image;
   }
 
   _sildeImage = () => {
-    var next_position = this.bhwi_silder_current.position + 1;
-
-    if (next_position != 0) this.bhwi_silder_current.jquery_element.removeClass('current').fadeOut(this.speed / 2);
-    if (next_position == this.bhwi_images.images.length) next_position = 0;
-
-    this._setImage(this.bhwi_images.images[next_position], next_position);
+    var next_image_id = this.bhwi_helper.check_index(this.current_image.id + 1, this.bhwi_images.images.length - 1);
+    if (this.current_dom == null) { next_image_id = 0 }
+    this._setImage(this.bhwi_images.find(next_image_id));
   };
 }
 
@@ -260,7 +243,6 @@ class BhwiLightbox {
 
   _addImageToLightbox(bhwi_image: BhwiImage) {
     this.current_image = bhwi_image;
-    console.log(this.current_image);
 
     this.dom_element.find('.bhwi-image-section').html(this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.id, bhwi_image.standard));
     this.dom_element.find('.bhwi-text-section').html(this.bhwi_helper.buildDescription(bhwi_image.link, bhwi_image.author, bhwi_image.text, bhwi_image.created_time));
