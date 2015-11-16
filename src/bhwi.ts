@@ -47,6 +47,13 @@ class BhwiHelper {
     return this.buildLink(link_url).append(this.buildImage(image_id, image_url));
   }
 
+  buildDescription(link_url: string, author: string, text: string, created_time: number) {
+    var p = jQuery('<p>').text(text);
+    var link = this.buildLink(link_url).text(author);
+    var span = jQuery('<span>').text(created_time);
+    return jQuery('<div>').addClass('bhwi-text-section').append([p, link, span]);
+  }
+
   buildIcon(paths: any) {
     var g = jQuery('<g>');
     jQuery.each(paths, function(index, path) {
@@ -205,11 +212,11 @@ class BhwiLightbox {
   }
 
   _addLightboxListener() {
-    jQuery('.bhwi-image').click((event) => {
+    jQuery('.bhwi-image').click((event :any) => {
       event.preventDefault();
       this._addImageToLightbox(this.bhwi_images.find(jQuery(event.target).data('bhwi-image-id')));
     });
-    this.dom_element.click((event) => {
+    this.dom_element.click((event :any) => {
       if (! jQuery(event.target).closest('.bhwi-content').length) {
         this.dom_element.fadeOut();
       }
@@ -221,9 +228,9 @@ class BhwiLightbox {
     bhwi_image_section.empty();
     bhwi_image_section.append(this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.id, bhwi_image.standard));
 
-    var bhwi_text_section = this.dom_element.find('.bhwi-text-section'); // TODO: implement correct structure
+    var bhwi_text_section = this.dom_element.find('.bhwi-text-section');
     bhwi_text_section.empty();
-    bhwi_text_section.append(bhwi_image.text);
+    bhwi_text_section.append(this.bhwi_helper.buildDescription(bhwi_image.link, bhwi_image.author, bhwi_image.text, bhwi_image.created_time));
 
     this.dom_element.fadeIn();
   }
