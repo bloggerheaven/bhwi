@@ -55,12 +55,12 @@ class BhwiHelper {
     return [nav, p, link, span];
   }
 
-  buildIcon(paths: any) {
+  buildIcon(paths: any, id:string = '') {
     var icon = '';
     jQuery.each(paths, function(index, path) {
       icon += '<path d="'+path+'"></path>';
     });
-    return jQuery('<svg class="bhwi-icon" version="1.1" xmlns="http://www.w3.org/2000/svg"><g>'+icon+'</g></svg>');
+    return jQuery('<svg id='+id+' class="bhwi-icon" version="1.1" xmlns="http://www.w3.org/2000/svg"><g>'+icon+'</g></svg>');
   }
 
   buildCrossIcon() {
@@ -68,11 +68,11 @@ class BhwiHelper {
   }
 
   buildLeftAngleIcon() {
-    return this.buildIcon(['M15,0l-10,10l10,10']);
+    return this.buildIcon(['M15,0l-10,10l10,10'], 'previousBhwiImage');
   }
 
   buildRightAngleIcon() {
-    return this.buildIcon(['M5,0l10,10l-10,10']);
+    return this.buildIcon(['M5,0l10,10l-10,10'], 'nextBhwiImage');
   }
 
   append(jquery_element: any) {
@@ -95,6 +95,12 @@ class BhwiHelper {
 
   shortDateFormat(date: Date) {
     return date.getDate()+"."+(date.getMonth()+1)+"."+date.getFullYear()
+  }
+
+  check_index(position: number, total_images: number) {
+    if (position > total_images) { return 0 }
+    if (position < 0) { return total_images }
+    return position;
   }
 }
 
@@ -128,8 +134,7 @@ class BhwiSlider {
     this.bhwi_options = bhwi_options;
     this.speed = this.bhwi_options.options.speed;
     this.bhwi_helper.interval(this._sildeImage, this.speed);
-
-    this.bhwi_helper.dom_element.addClass('bhwi-slider')
+    this.bhwi_helper.dom_element.addClass('bhwi-slider');
   }
 
   _setImage(bhwi_image: BhwiImage, position: number) {
@@ -198,6 +203,7 @@ class BhwiLightbox {
   bhwi_helper: BhwiHelper;
   bhwi_options: BhwiOptions;
   bhwi_images: BhwiImages;
+  current_image: BhwiImage;
   dom_element: any;
 
   constructor(bhwi_helper: BhwiHelper, bhwi_options: BhwiOptions, bhwi_images: BhwiImages) {
@@ -214,30 +220,54 @@ class BhwiLightbox {
     var lightbox = jQuery('<div>').addClass('bhwi-lightbox').attr('id', 'bhwi-lightbox');
     this.dom_element = lightbox.append(content.append(image_section, text_section)).appendTo('body');
     this._addLightboxListener();
+    this._addCloseListener();
   }
 
   _addLightboxListener() {
-    jQuery('.bhwi-image').click((event :any) => {
+    var callback = (event: any) => {
       event.preventDefault();
       this._addImageToLightbox(this.bhwi_images.find(jQuery(event.target).data('bhwi-image-id')));
-    });
+    };
+
+    if (this.bhwi_options.options.form == 'slider') {
+      jQuery('#bhwi').on('click', '.bhwi-image', callback);
+    } else {
+      jQuery('.bhwi-image').click(callback);
+    }
+  }
+
+  _addCloseListener() {
     this.dom_element.click((event :any) => {
-      if (! jQuery(event.target).closest('.bhwi-content').length) {
+      if (! jQuery(event.target).closest('.bhwi-content').length && jQuery(event.target).attr('class') != 'bhwi-icon') {
         this.dom_element.fadeOut();
       }
     });
   }
 
+  _addNavigationListener() {
+    var total_images = this.bhwi_options.options.form == 'timeline' ? this.bhwi_options.options.images_number : this.bhwi_images.images.length;
+    total_images--;
+
+    jQuery('#previousBhwiImage').click(() => {
+      this._addImageToLightbox(this.bhwi_images.find(this.bhwi_helper.check_index(this.current_image.id - 1, total_images)));
+    });
+
+    jQuery('#nextBhwiImage').click(() => {
+      this._addImageToLightbox(this.bhwi_images.find(this.bhwi_helper.check_index(this.current_image.id + 1, total_images)));
+      this.dom_element.fadeIn();
+    });
+  }
+
   _addImageToLightbox(bhwi_image: BhwiImage) {
-    var bhwi_image_section = this.dom_element.find('.bhwi-image-section');
-    bhwi_image_section.empty();
-    bhwi_image_section.append(this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.id, bhwi_image.standard));
+    this.current_image = bhwi_image;
+    console.log(this.current_image);
 
-    var bhwi_text_section = this.dom_element.find('.bhwi-text-section');
-    bhwi_text_section.empty();
-    bhwi_text_section.append(this.bhwi_helper.buildDescription(bhwi_image.link, bhwi_image.author, bhwi_image.text, bhwi_image.created_time));
+    this.dom_element.find('.bhwi-image-section').html(this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.id, bhwi_image.standard));
+    this.dom_element.find('.bhwi-text-section').html(this.bhwi_helper.buildDescription(bhwi_image.link, bhwi_image.author, bhwi_image.text, bhwi_image.created_time));
 
-    this.dom_element.fadeIn();
+    this._addNavigationListener();
+
+    if (this.dom_element.is(':hidden')) { this.dom_element.fadeIn(); }
   }
 }
 
