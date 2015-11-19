@@ -11,6 +11,7 @@ class BhwiOptions {
       form: 'timeline', // or slider
       images_number: 8, // only for timeline
       lightbox: true,
+      lightbox_background: false,
       preloading_images: true,
       // url: 'api-url' // if type: 'bhwi'
       // client_id: '1234' // if type: 'instagram'
@@ -56,12 +57,16 @@ class BhwiHelper {
     return [nav, p, link, span];
   }
 
-  buildIcon(paths: any, id:string = '') {
+  buildBackground(image_url: string) {
+    return jQuery('<div>').addClass('bhwi-full-background').css('background', 'url("' + image_url + '") center no-repeat');
+  }
+
+  buildIcon(paths: any, id:string = '', css_class: string = '') {
     var icon = '';
     jQuery.each(paths, function(index, path) {
       icon += '<path d="'+path+'"></path>';
     });
-    return jQuery('<svg id='+id+' class="bhwi-icon" version="1.1" xmlns="http://www.w3.org/2000/svg"><g>'+icon+'</g></svg>');
+    return jQuery('<svg id='+id+' class="bhwi-icon '+css_class+'" version="1.1" xmlns="http://www.w3.org/2000/svg"><g>'+icon+'</g></svg>');
   }
 
   buildCrossIcon() {
@@ -69,11 +74,11 @@ class BhwiHelper {
   }
 
   buildLeftAngleIcon() {
-    return this.buildIcon(['M15,0l-10,10l10,10'], 'previousBhwiImage');
+    return this.buildIcon(['M40,0l-30,30l30,30'], 'previousBhwiImage', 'left');
   }
 
   buildRightAngleIcon() {
-    return this.buildIcon(['M5,0l10,10l-10,10'], 'nextBhwiImage');
+    return this.buildIcon(['m0,0l30,30l-30,30'], 'nextBhwiImage', 'right');
   }
 
   append(jquery_element: any) {
@@ -201,8 +206,9 @@ class BhwiLightbox {
     var image_section = jQuery('<div>').addClass('bhwi-image-section');
     var text_section = jQuery('<div>').addClass('bhwi-text-section');
     var content = jQuery('<div>').addClass('bhwi-content');
+    var background = jQuery('<div>').addClass('bhwi-full-background');
     var lightbox = jQuery('<div>').addClass('bhwi-lightbox').attr('id', 'bhwi-lightbox');
-    this.dom_element = lightbox.append(content.append(image_section, text_section)).appendTo('body');
+    this.dom_element = lightbox.append(background, content.append(image_section, text_section)).appendTo('body');
     this._addLightboxListener();
     this._addCloseListener();
   }
@@ -222,7 +228,8 @@ class BhwiLightbox {
 
   _addCloseListener() {
     this.dom_element.click((event :any) => {
-      if (! jQuery(event.target).closest('.bhwi-content').length && jQuery(event.target).attr('class') != 'bhwi-icon') {
+      // TODO: put indexOf in a try catch ...
+      if (! jQuery(event.target).closest('.bhwi-content').length && jQuery(event.target).attr('class').indexOf("bhwi-icon") == -1) {
         this.dom_element.fadeOut();
       }
     });
@@ -245,6 +252,9 @@ class BhwiLightbox {
   _addImageToLightbox(bhwi_image: BhwiImage) {
     this.current_image = bhwi_image;
 
+    if (this.bhwi_options.options.lightbox_background) {
+      this.dom_element.find('.bhwi-full-background').replaceWith(this.bhwi_helper.buildBackground(bhwi_image.standard));
+    }
     this.dom_element.find('.bhwi-image-section').html(this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.id, bhwi_image.standard));
     this.dom_element.find('.bhwi-text-section').html(this.bhwi_helper.buildDescription(bhwi_image.link, bhwi_image.author, bhwi_image.text, bhwi_image.created_time));
 

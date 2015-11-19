@@ -62,11 +62,42 @@
       width: 34%;
     }
   }
+
+  .bhwi-full-background {
+    background-size: cover !important;
+    display: block;
+    filter: blur(2px);
+    -webkit-filter: blur(2px);
+    height: 100%;
+    left: 0;
+    position: fixed;
+    right: 0;
+    z-index: 1;
+  }
+
+  .bhwi-icon {
+    width: 40px;
+    height: 60px;
+    position: absolute;
+    top: calc(50% - 30px);
+
+    &.left {
+      left: -80px;
+    }
+
+    &.right {
+      right: -80px;
+    }
+
+    &.right, &.left {
+      g {
+        stroke-width: 2px;
+      }
+    }
+  }
 }
 
 .bhwi-icon {
-  width: 20px;
-  height: 20px;
   g {
     stroke: rgba(0,0,0,0.5);
     fill: none;
