@@ -11,6 +11,10 @@ class BhwiOptions {
       form: 'timeline', // or slider
       images_number: 8, // only for timeline
       lightbox: true,
+      lightbox_key_navigation: {
+        previous: 37,
+        next: 39
+      },
       lightbox_background: false,
       preloading_images: true,
       // url: 'api-url' // if type: 'bhwi'
@@ -32,9 +36,11 @@ class BhwiOptions {
 
 class BhwiHelper {
   dom_element: any;
+  timer: any;
 
   constructor(dom_element: string) {
     this.dom_element = jQuery('#' + dom_element).addClass('bhwi');
+    this.timer = {};
   }
 
   buildLink(link_url: string) {
@@ -89,6 +95,11 @@ class BhwiHelper {
     func();
     var func_wrapper = () => { this.interval(func, delay) };
     setTimeout(func_wrapper, delay);
+  }
+
+  delay(key: string, func: any, delay: number) {
+    clearTimeout(this.timer[key]);
+    this.timer[key] = setTimeout(func, delay);
   }
 
   nullTry(object: any, key: string) {
@@ -235,18 +246,38 @@ class BhwiLightbox {
     });
   }
 
+  _addPreviousImage(total_images: number) {
+    this._addImageToLightbox(this.bhwi_images.find(this.bhwi_helper.check_index(this.current_image.id - 1, total_images)));
+  }
+
+  _addNextImage(total_images: number) {
+    this._addImageToLightbox(this.bhwi_images.find(this.bhwi_helper.check_index(this.current_image.id + 1, total_images)));
+  }
+
   _addNavigationListener() {
     var total_images = this.bhwi_options.options.form == 'timeline' ? this.bhwi_options.options.images_number : this.bhwi_images.images.length;
     total_images--;
 
     jQuery('#previousBhwiImage').click(() => {
-      this._addImageToLightbox(this.bhwi_images.find(this.bhwi_helper.check_index(this.current_image.id - 1, total_images)));
+      this._addPreviousImage(total_images);
     });
 
     jQuery('#nextBhwiImage').click(() => {
-      this._addImageToLightbox(this.bhwi_images.find(this.bhwi_helper.check_index(this.current_image.id + 1, total_images)));
-      this.dom_element.fadeIn();
+      this._addNextImage(total_images);
     });
+
+    if (this.bhwi_options.options.lightbox_key_navigation != false) {
+      jQuery(document).keyup( (event) => {
+        this.bhwi_helper.delay('lightbox-navigation', () => {
+          if (event.which == this.bhwi_options.options.lightbox_key_navigation.previous) {
+            this._addPreviousImage(total_images);
+          }
+          if (event.which == this.bhwi_options.options.lightbox_key_navigation.next) {
+            this._addNextImage(total_images);
+          }
+        }, 200);
+      });
+    }
   }
 
   _addImageToLightbox(bhwi_image: BhwiImage) {
