@@ -1,4 +1,7 @@
 .bhwi {
+  * {
+    box-sizing: border-box;
+  }
   a {
     height: 100%;
     display: block;
@@ -37,32 +40,62 @@
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  text-align: center;
-
+  background-color: rgba(0, 0, 0, 0.8);
+  * {
+    box-sizing: border-box;
+  }
   .bhwi-content {
     display: inline-block;
     z-index: 1111;
     position: relative;
     background-color: #ffffff;
     margin-top: 100px;
-    width: 1000px;
-
+    width: 700px;
+    max-height: 100%;
+    max-width: 100%;
     .bhwi-image-section, .bhwi-text-section {
       float: left;
-
       * {
         max-width: 100%;
       }
     }
     .bhwi-image-section {
-      width: 66%;
+      width: 60%;
     }
     .bhwi-text-section {
-      width: 34%;
+      width: 40%;
+      padding: 10px;
+      .bhwi-author {
+        display: block;
+        margin: 20px 0 25px 20px;
+        font-size: 20px;
+        color: inherit;
+        text-decoration: none;
+      }
+      .bhwi-description {
+        margin: 20px;
+      }
+      hr {
+        height: 1px;
+        border: 0;
+        border-top: 1px solid #ccc;
+      }
+      footer {
+        position: absolute;
+        bottom: 0;
+        width: 37%;
+        width: calc(40% - 20px);
+        margin-bottom: 10px;
+        .bhwi-credits {
+          text-align: right;
+          a {
+            color: rgba(0, 0, 0, 0.7);
+            text-decoration: none;
+          }
+        }
+      }
     }
   }
-
   .bhwi-full-background {
     background-size: cover !important;
     display: block;
@@ -74,32 +107,40 @@
     right: 0;
     z-index: 1;
   }
-
   .bhwi-icon {
-    width: 40px;
-    height: 60px;
     position: absolute;
-    top: calc(50% - 30px);
-
     &.left {
       left: -80px;
     }
-
     &.right {
       right: -80px;
     }
-
     &.right, &.left {
+      width: 40px;
+      height: 60px;
+      top: calc(50% - 30px);
       g {
+        stroke: rgba(255, 255, 255, 0.8);
         stroke-width: 2px;
       }
+      &:hover {
+        g {
+          stroke: #ffffff;
+        }
+      }
+    }
+    &.close {
+      width: 20px;
+      height: 20px;
+      top: 10px;
+      right: 10px;
     }
   }
 }
 
 .bhwi-icon {
   g {
-    stroke: rgba(0,0,0,0.5);
+    stroke: rgba(0, 0, 0, 0.5);
     fill: none;
   }
   &:hover {
