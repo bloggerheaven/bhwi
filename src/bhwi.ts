@@ -48,7 +48,7 @@ class BhwiHelper {
   }
 
   buildImage(image_id: number, image_url: string) {
-    return jQuery('<img>').attr('src', image_url).addClass('bhwi-image').data('bhwi-image-id', image_id);
+    return jQuery('<div>').css('background', 'url("' + image_url + '") center no-repeat').addClass('bhwi-image').data('bhwi-image-id', image_id);
   }
 
   buildSlide(link_url: string, image_id: number, image_url: string) {
@@ -175,27 +175,24 @@ class BhwiTimeline {
     this.bhwi_options = bhwi_options;
 
     this.bhwi_helper.dom_element.addClass('bhwi-timeline');
+
     this._setAllImages();
+    this._resizeImages();
     this._responsiveImages();
   }
 
   _setAllImages () {
-    var loaded_images = 0;
     jQuery.each(this.bhwi_images.images, (index: number, bhwi_image: BhwiImage) => {
       var image_wrapper = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.id, bhwi_image.low);
       this.bhwi_helper.append(image_wrapper);
-      jQuery(image_wrapper).find('img').on('load', () => {
-        loaded_images++;
-        if (loaded_images == this.bhwi_options.options.images_number) { this._resizeImages(); }
-      });
       if (index == (this.bhwi_options.options.images_number - 1)) return false;
     });
   }
 
   _resizeImages () {
-    var images = jQuery(this.bhwi_helper.dom_element).find('img');
-    images.height('auto');
-    images.height(images.height());
+    var images = jQuery(this.bhwi_helper.dom_element).find('.bhwi-image');
+    var size = this.bhwi_helper.dom_element.width() / this.bhwi_options.options.images_number - 6
+    images.height(size).width(size)
   }
 
   _responsiveImages () {
@@ -243,7 +240,7 @@ class BhwiLightbox {
 
   _addCloseListener() {
     this.dom_element.click((event :any) => {
-      if (! jQuery(event.target).closest('.bhwi-content').length &&
+      if (jQuery(event.target).attr('id') == 'close-lightbox' || ! jQuery(event.target).closest('.bhwi-content').length &&
         jQuery(event.target).attr('class') != '' &&
         jQuery(event.target).attr('class').indexOf('bhwi-icon') == -1) {
         this.dom_element.fadeOut();
