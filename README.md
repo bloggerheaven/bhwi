@@ -3,7 +3,7 @@
 # Example
 
 ```
-git clone git@git.renuo.ch:cyrilkyburz/bhwi.git
+git clone git@github.com:cyrilkyburz/bhwi.git
 cd bhwi/example
 Open index.html in a browser
 ```
@@ -11,7 +11,7 @@ Open index.html in a browser
 # Setup
 
 ```
-git clone git@git.renuo.ch:cyrilkyburz/bhwi.git
+git clone git@github.com:cyrilkyburz/bhwi.git
 cd bhwi
 npm install bower gulp tsd -g
 npm install
@@ -20,8 +20,7 @@ tsd reinstall --save --overwrite
 
 # Requirements 
 
-* iojs (or Node)
-* npm
+* nvm
 
 # Gulp
 
@@ -42,5 +41,5 @@ gulp compile
 ## Release
 
 ```
-gulp release
+gulp compile --type production
 ```

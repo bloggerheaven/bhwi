@@ -5,7 +5,7 @@
   "description": "Blogger Heaven Instagram Widget",
   "repository": {
     "type": "git",
-    "url": "git@github.com:renuo/bhwi.git"
+    "url": "git@github.com:cyrilkyburz/bhwi.git"
   },
   "license": "MIT",
   "author": "Cyril Kyburz <info@blogger-heaven.com> (www.blogger-heaven.com)",
@@ -14,14 +14,13 @@
     "bower": "^1.3.3",
     "coffee-script": "^1.8.0",
     "gulp": "^3.8.11",
-    "gulp-rename": "^1.2.0",
     "gulp-sass": "^2.0.4",
     "gulp-typescript": "^2.8.2",
     "gulp-uglify": "^1.1.0",
     "gulp-util": "^2.2.14"
   },
   "engines": {
-    "iojs": "3.0.0"
+    "node": "5"
   },
   "analyze": true,
   "scripts": {
