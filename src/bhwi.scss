@@ -147,6 +147,25 @@
       right: 10px;
     }
   }
+  @media (max-width: 700px) {
+    .bhwi-content {
+      width: 400px;
+      .bhwi-image-section, .bhwi-text-section {
+        width: auto;
+        float: none;
+      }
+      .bhwi-text-section {
+        .bhwi-description {
+          margin: 40px 20px;
+        }
+        footer {
+          position: initial;
+          bottom: initial;
+          width: auto;
+        }
+      }
+    }
+  }
 }
 .bhwi-icon {
   cursor: pointer;
