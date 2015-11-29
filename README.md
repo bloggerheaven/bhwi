@@ -1,6 +1,59 @@
 # bhwi - Blogger Heaven Widget Instagram
 
-# Example
+A lightweight customizable Instagram widget. Able to handle different APIs.
+See the corresponding [bhwi API](https://github.com/cyrilkyburz/bhwi_proxy).
+
+## Installation
+
+Install it with bower (or download it)
+
+```
+bower install bhwi
+```
+
+Then include it in your page like that:
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="./path/to/bhwi.css" type="text/css">
+<!-- Don't forget to load jQuery before bhwi -->
+<script src="./path/to/bhwi.min.js"></script>
+```
+
+## Usage
+
+### Initialization of bhwi 
+
+
+#### Sample 
+
+```js
+new Bhwi('your_user_id', {client_id: 'your_client_id'});
+```
+
+#### With options
+
+```js
+new Bhwi('your_user_id', {url: 'http://right-url/recent_images/', type: 'bhwi', form: 'slider', speed: '2000', lightbox: false});
+```
+
+### Options
+
+Key                       | Default                     | Others available        | Notes
+------------------------- | --------------------------- | ----------------------- | --------------------------
+client_id                 | '' (empty)                  | 'your client id'        | The client id you get from instagram
+dom_element               | 'bhwi'	                    | 'any ID'                | ID of the dom element where the widget will be appended
+form                      | 'timeline'                  | 'slider'                | Type of the widget
+images_number             | 8                           | 'any number'            | Number of images in the timeline (only available for the timeline)
+lightbox                  | true                        | false                   | Enables lightbox
+lightbox_background       | false                       | true                    | Experimental (only looks good with high resolution images)
+lightbox_key_navigation   | { previous: 37, next: 39 }  | 'any unicode key code'  | Only supported previous and next
+preloading_images         | true                        | false                   | Preloads images for slider & lightbox
+speed                     | 4000  (ms)                  | 'any number' (ms)       | Time per slide (only available for the silder)
+type                      | 'instagram'                 | 'bhwi_proxy'            | Type of API
+url                       | '' (empty)                  | 'bhwi proxy (cdn) url'  | Url of bhwi proxy (cdn) (only required if type 'bhwi_proxy')
+
+## Example
 
 ```
 git clone git@github.com:cyrilkyburz/bhwi.git
@@ -8,7 +61,9 @@ cd bhwi/example
 Open index.html in a browser
 ```
 
-# Setup
+# Development
+
+## Setup
 
 ```
 git clone git@github.com:cyrilkyburz/bhwi.git
@@ -18,13 +73,13 @@ npm install
 tsd reinstall --save --overwrite
 ```
 
-# Requirements 
+## Requirements 
 
 * nvm
 
-# Gulp
+## Gulp
 
-## Development
+### Development
 
 (Auto compiling)
 
@@ -32,13 +87,13 @@ tsd reinstall --save --overwrite
 gulp 
 ```
 
-## Compile
+### Compile
 
 ```
 gulp compile
 ```
 
-## Release
+### Release
 
 ```
 gulp compile --type production
