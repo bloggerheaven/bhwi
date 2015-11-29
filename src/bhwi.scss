@@ -150,6 +150,8 @@
   @media (max-width: 700px) {
     .bhwi-content {
       width: 400px;
+      overflow-x: scroll;
+      margin-top: 0;
       .bhwi-image-section, .bhwi-text-section {
         width: auto;
         float: none;
