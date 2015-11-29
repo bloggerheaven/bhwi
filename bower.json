@@ -22,10 +22,12 @@
   },
   "appPath": "src",
   "main": [
-    "dist/bhwi.min.js"
+    "dist/bhwi.min.js",
+    "dist/bhwi.css"
   ],
   "ignore": [
     "*",
-    "!dist"
+    "!dist",
+    "!dist/*"
   ]
 }
