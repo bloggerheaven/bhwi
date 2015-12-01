@@ -125,6 +125,52 @@ class BhwiHelper {
   }
 }
 
+// not cross browser supported, see: http://caniuse.com/#feat=touch
+class BhwiTouch {
+  dom_element: string;
+  startX: number;
+  endX: number;
+  tolerance: number;
+  rightCallback: Function;
+  leftCallback: Function;
+  remainedCallback: Function;
+
+  constructor(dom_element: string, rightCallback: Function, leftCallback: Function, remainedCallback: Function) {
+    this.dom_element = dom_element;
+    this.tolerance = 10;
+    this.rightCallback = rightCallback;
+    this.leftCallback = leftCallback;
+    this.remainedCallback = remainedCallback;
+  }
+
+  _initEvents() {
+    var doc = jQuery(document);
+    doc.on('touchstart', this.dom_element, this._start);
+    doc.on('touchend', this.dom_element, this._end);
+  }
+
+  _start(event: any) {
+    event.preventDefault();
+    this.startX = this._getX(event);
+  }
+
+  _end(event: any) {
+    event.preventDefault();
+    this.endX = this._getX(event);
+    event._execCallback();
+  }
+
+  _getX(event: any) {
+    return event.originalEvent.changedTouches[0].pageX;
+  }
+
+  _execCallback() {
+    if (this.startX - this.endX + this.tolerance < 0) { this.rightCallback() }
+    if (this.startX - this.endX - this.tolerance > 0) { this.leftCallback() }
+    this.remainedCallback();
+  }
+}
+
 class BhwiSlider {
   bhwi_helper: BhwiHelper;
   bhwi_images: BhwiImages;
