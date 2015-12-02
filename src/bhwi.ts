@@ -146,22 +146,19 @@ class BhwiTouch {
 
   initEvents() {
     var doc = jQuery(document);
-    doc.on('touchstart', this.dom_element, this._start);
-    doc.on('touchend', this.dom_element, this._end);
+    doc.on('touchstart', this.dom_element, (event: any) => { this._start(event) });
+    doc.on('touchend', this.dom_element, (event: any) => {  this._end(event) });
   }
 
   _start(event: any) {
-    console.log('s');
     //event.preventDefault();
     this.startX = this._getX(event);
   }
 
   _end(event: any) {
-    console.log('e');
-
     //event.preventDefault();
     this.endX = this._getX(event);
-    event._execCallback();
+    this._execCallback();
   }
 
   _getX(event: any) {
