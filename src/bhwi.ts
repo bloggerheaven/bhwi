@@ -131,31 +131,35 @@ class BhwiTouch {
   startX: number;
   endX: number;
   tolerance: number;
-  rightCallback: Function;
   leftCallback: Function;
+  rightCallback: Function;
   remainedCallback: Function;
 
-  constructor(dom_element: string, rightCallback: Function, leftCallback: Function, remainedCallback: Function) {
+  constructor(dom_element: string, leftCallback: Function, rightCallback: Function, remainedCallback: Function) {
     this.dom_element = dom_element;
     this.tolerance = 10;
-    this.rightCallback = rightCallback;
     this.leftCallback = leftCallback;
+    this.rightCallback = rightCallback;
     this.remainedCallback = remainedCallback;
+    this.initEvents();
   }
 
-  _initEvents() {
+  initEvents() {
     var doc = jQuery(document);
     doc.on('touchstart', this.dom_element, this._start);
     doc.on('touchend', this.dom_element, this._end);
   }
 
   _start(event: any) {
-    event.preventDefault();
+    console.log('s');
+    //event.preventDefault();
     this.startX = this._getX(event);
   }
 
   _end(event: any) {
-    event.preventDefault();
+    console.log('e');
+
+    //event.preventDefault();
     this.endX = this._getX(event);
     event._execCallback();
   }
