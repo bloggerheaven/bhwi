@@ -168,8 +168,8 @@ class BhwiTouch {
   }
 
   _execCallback() {
-    if (this.startX - this.endX + this.tolerance < 0) { this.rightCallback() }
-    if (this.startX - this.endX - this.tolerance > 0) { this.leftCallback() }
+    if (this.startX - this.endX + this.tolerance < 0) { console.log('right'); return this.rightCallback() }
+    if (this.startX - this.endX - this.tolerance > 0) { console.log('left'); return this.leftCallback() }
     this.remainedCallback();
   }
 }
@@ -254,12 +254,14 @@ class BhwiLightbox {
   bhwi_options: BhwiOptions;
   bhwi_images: BhwiImages;
   current_image: BhwiImage;
+  total_images: number;
   dom_element: any;
 
   constructor(bhwi_helper: BhwiHelper, bhwi_options: BhwiOptions, bhwi_images: BhwiImages) {
     this.bhwi_helper = bhwi_helper;
     this.bhwi_options = bhwi_options;
     this.bhwi_images = bhwi_images;
+    this.total_images = this.bhwi_options.options.form == 'timeline' ? this.bhwi_options.options.images_number : this.bhwi_images.images.length;
     this._buildLightbox();
   }
 
@@ -297,38 +299,49 @@ class BhwiLightbox {
     });
   }
 
-  _addPreviousImage(total_images: number) {
-    this._addImageToLightbox(this.bhwi_images.find(this.bhwi_helper.check_index(this.current_image.id - 1, total_images)));
+  _addPreviousImage() {
+    this._addImageToLightbox(this.bhwi_images.find(this.bhwi_helper.check_index(this.current_image.id - 1, this.total_images)));
   }
 
-  _addNextImage(total_images: number) {
-    this._addImageToLightbox(this.bhwi_images.find(this.bhwi_helper.check_index(this.current_image.id + 1, total_images)));
+  _addNextImage() {
+    this._addImageToLightbox(this.bhwi_images.find(this.bhwi_helper.check_index(this.current_image.id + 1, this.total_images)));
   }
 
-  _addNavigationListener() {
-    var total_images = this.bhwi_options.options.form == 'timeline' ? this.bhwi_options.options.images_number : this.bhwi_images.images.length;
-    total_images--;
-
+  _addIconNavigationListener() {
     jQuery('#previous-bhwi-image').click(() => {
-      this._addPreviousImage(total_images);
+      this._addPreviousImage();
     });
 
     jQuery('#next-bhwi-image').click(() => {
-      this._addNextImage(total_images);
+      this._addNextImage();
     });
+  }
 
+  _addKeyNavigationListener() {
     if (this.bhwi_options.options.lightbox_key_navigation != false) {
       jQuery(document).keyup( (event) => {
         this.bhwi_helper.delay('lightbox-navigation', () => {
           if (event.which == this.bhwi_options.options.lightbox_key_navigation.previous) {
-            this._addPreviousImage(total_images);
+            this._addPreviousImage();
           }
           if (event.which == this.bhwi_options.options.lightbox_key_navigation.next) {
-            this._addNextImage(total_images);
+            this._addNextImage();
           }
         }, 200);
       });
     }
+  }
+
+  _addTouchNavigationListener() {
+    new BhwiTouch('#bhwi-lightbox', () => { this._addPreviousImage() }, () => { this._addNextImage() }, function () { console.log('nothing')})
+  }
+
+  _addNavigationListener() {
+    this.total_images = this.total_images--;
+
+    this._addIconNavigationListener();
+    this._addKeyNavigationListener();
+    this._addTouchNavigationListener();
   }
 
   _addImageToLightbox(bhwi_image: BhwiImage) {
