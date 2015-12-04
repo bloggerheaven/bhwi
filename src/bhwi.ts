@@ -131,40 +131,49 @@ class BhwiTouch {
   dom_element: string;
   startEvent: Event;
   startX: number;
+  startY: number;
   endEvent: Event;
   endX: number;
+  endY: number;
   tolerance: number;
-  leftCallback: Function;
+  upCallback: Function;
   rightCallback: Function;
+  downCallback: Function;
+  leftCallback: Function;
   remainedCallback: Function;
 
-  constructor(bhwi_helper: BhwiHelper, dom_element: string, leftCallback: Function, rightCallback: Function, remainedCallback: Function) {
+  constructor(bhwi_helper: BhwiHelper, dom_element: string, upCallback: Function, rightCallback: Function, downCallback: Function, leftCallback: Function, remainedCallback: Function) {
     this.bhwi_helper = bhwi_helper;
     this.dom_element = dom_element;
     this.tolerance = 10;
-    this.leftCallback = leftCallback;
+    this.upCallback = upCallback;
     this.rightCallback = rightCallback;
+    this.downCallback = downCallback;
+    this.leftCallback = leftCallback;
     this.remainedCallback = remainedCallback;
     this.initEvents();
   }
 
-  // TODO: ugly, refactor it!
   initEvents() {
     var doc = jQuery(document);
-    doc.on('touchstart', this.dom_element, (event: Event) => { this.startEvent = event; this.bhwi_helper.delay('touchstart', () => { this._start() }, 200) });
-    doc.on('touchend', this.dom_element, (event: Event) => { this.endEvent = event; this.bhwi_helper.delay('touchend', () => { this._end() }, 200) });
+    doc.on('touchstart', this.dom_element, (event: Event) => {
+      this.startEvent = event;
+      this.bhwi_helper.delay('touchstart', () => { this._start() }, 200)
+    });
+    doc.on('touchend', this.dom_element, (event: Event) => {
+      this.endEvent = event;
+      this.bhwi_helper.delay('touchend', () => { this._end() }, 200)
+    });
   }
 
   _start() {
-    // TODO: decide
-    //event.preventDefault();
     this.startX = this._getX(this.startEvent);
+    this.startY = this._getY(this.startEvent);
   }
 
   _end() {
-    // TODO: decide
-    //event.preventDefault();
     this.endX = this._getX(this.endEvent);
+    this.endY = this._getY(this.endEvent);
     this._execCallback();
   }
 
@@ -172,10 +181,46 @@ class BhwiTouch {
     return event.originalEvent.changedTouches[0].pageX;
   }
 
+  _getY(event: any) {
+    return event.originalEvent.changedTouches[0].pageY;
+  }
+
   _execCallback() {
-    if (this.startX - this.endX + this.tolerance < 0) { return this.rightCallback() }
-    if (this.startX - this.endX - this.tolerance > 0) { return this.leftCallback() }
-    this.remainedCallback();
+    var diffY = Math.abs(this.endY - this.startY);
+    var diffX = Math.abs(this.endX - this.startX);
+
+  // only if swipe bigger then tolerance
+    if (diffX > this.tolerance || diffY > this.tolerance) {
+
+    // up or down
+      if (diffY > diffX) {
+
+      // up
+        if (this.endY < this.startY) {
+          return this.upCallback();
+
+      // down
+        } else {
+          return this.downCallback();
+        }
+
+    // left or right
+      } else {
+
+      // right
+        if (this.endX > this.startY) {
+          return this.rightCallback();
+
+      // left
+        } else {
+          return this.leftCallback();
+        }
+      }
+
+  // no swipe
+    } else {
+      this.remainedCallback();
+    }
   }
 }
 
@@ -245,8 +290,8 @@ class BhwiTimeline {
 
   _resizeImages () {
     var images = jQuery(this.bhwi_helper.dom_element).find('.bhwi-image');
-    var size = this.bhwi_helper.dom_element.width() / this.bhwi_options.options.images_number - 6
-    images.height(size).width(size)
+    var size = this.bhwi_helper.dom_element.width() / this.bhwi_options.options.images_number - 6;
+    images.height(size).width(size);
   }
 
   _responsiveImages () {
@@ -339,7 +384,15 @@ class BhwiLightbox {
 
   // TODO: add a nothing callback
   _addTouchNavigationListener() {
-    new BhwiTouch(this.bhwi_helper, '#bhwi-lightbox', () => { this._addPreviousImage() }, () => { this._addNextImage() }, function () { console.log('nothing')})
+    new BhwiTouch(
+      this.bhwi_helper,
+      '#bhwi-lightbox',
+      () => {},
+      () => { this._addNextImage() },
+      () => {},
+      () => { this._addPreviousImage() },
+      () => { this.dom_element.fadeOut() }
+    )
   }
 
   _addNavigationListener() {
