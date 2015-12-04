@@ -114,6 +114,14 @@ class BhwiHelper {
     }
   }
 
+  width() {
+    try {
+      return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    } catch(_error) {
+      return jQuery(window).width();
+    }
+  }
+
   shortDateFormat(date: Date) {
     return date.getDate()+"."+(date.getMonth()+1)+"."+date.getFullYear()
   }
@@ -382,7 +390,6 @@ class BhwiLightbox {
     }
   }
 
-  // TODO: add a nothing callback
   _addTouchNavigationListener() {
     new BhwiTouch(
       this.bhwi_helper,
@@ -392,7 +399,12 @@ class BhwiLightbox {
       () => {},
       () => { this._addPreviousImage() },
       () => { this.dom_element.fadeOut() }
-    )
+    );
+    if (this.bhwi_helper.width() < 500) {
+      this.dom_element.find('.bhwi-image-section a').click(function (event: Event) {
+        event.preventDefault();
+      })
+    }
   }
 
   _addNavigationListener() {
