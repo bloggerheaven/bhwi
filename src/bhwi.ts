@@ -127,15 +127,19 @@ class BhwiHelper {
 
 // not cross browser supported, see: http://caniuse.com/#feat=touch
 class BhwiTouch {
+  bhwi_helper: BhwiHelper;
   dom_element: string;
+  startEvent: Event;
   startX: number;
+  endEvent: Event;
   endX: number;
   tolerance: number;
   leftCallback: Function;
   rightCallback: Function;
   remainedCallback: Function;
 
-  constructor(dom_element: string, leftCallback: Function, rightCallback: Function, remainedCallback: Function) {
+  constructor(bhwi_helper: BhwiHelper, dom_element: string, leftCallback: Function, rightCallback: Function, remainedCallback: Function) {
+    this.bhwi_helper = bhwi_helper;
     this.dom_element = dom_element;
     this.tolerance = 10;
     this.leftCallback = leftCallback;
@@ -144,22 +148,23 @@ class BhwiTouch {
     this.initEvents();
   }
 
+  // TODO: ugly, refactor it!
   initEvents() {
     var doc = jQuery(document);
-    doc.on('touchstart', this.dom_element, (event: any) => { this._start(event) });
-    doc.on('touchend', this.dom_element, (event: any) => { this._end(event) });
+    doc.on('touchstart', this.dom_element, (event: Event) => { this.startEvent = event; this.bhwi_helper.delay('touchstart', () => { this._start() }, 200) });
+    doc.on('touchend', this.dom_element, (event: Event) => { this.endEvent = event; this.bhwi_helper.delay('touchend', () => { this._end() }, 200) });
   }
 
-  _start(event: any) {
+  _start() {
     // TODO: decide
     //event.preventDefault();
-    this.startX = this._getX(event);
+    this.startX = this._getX(this.startEvent);
   }
 
-  _end(event: any) {
+  _end() {
     // TODO: decide
     //event.preventDefault();
-    this.endX = this._getX(event);
+    this.endX = this._getX(this.endEvent);
     this._execCallback();
   }
 
@@ -168,8 +173,8 @@ class BhwiTouch {
   }
 
   _execCallback() {
-    if (this.startX - this.endX + this.tolerance < 0) { console.log('right'); return this.rightCallback() }
-    if (this.startX - this.endX - this.tolerance > 0) { console.log('left'); return this.leftCallback() }
+    if (this.startX - this.endX + this.tolerance < 0) { return this.rightCallback() }
+    if (this.startX - this.endX - this.tolerance > 0) { return this.leftCallback() }
     this.remainedCallback();
   }
 }
@@ -332,8 +337,9 @@ class BhwiLightbox {
     }
   }
 
+  // TODO: add a nothing callback
   _addTouchNavigationListener() {
-    new BhwiTouch('#bhwi-lightbox', () => { this._addPreviousImage() }, () => { this._addNextImage() }, function () { console.log('nothing')})
+    new BhwiTouch(this.bhwi_helper, '#bhwi-lightbox', () => { this._addPreviousImage() }, () => { this._addNextImage() }, function () { console.log('nothing')})
   }
 
   _addNavigationListener() {
