@@ -127,8 +127,8 @@ class BhwiHelper {
   }
 
   check_index(position: number, total_images: number) {
-    if (position > total_images) { return 0 }
-    if (position < 0) { return total_images }
+    if (position > total_images - 1) { return 0 }
+    if (position < 0) { return total_images - 1 }
     return position;
   }
 }
