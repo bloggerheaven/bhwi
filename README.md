@@ -75,6 +75,10 @@ Open index.html in a browser
 
 # Development
 
+## Requirements 
+
+* nvm
+
 ## Setup
 
 ```
@@ -84,10 +88,6 @@ npm install bower gulp tsd -g
 npm install
 tsd reinstall --save --overwrite
 ```
-
-## Requirements 
-
-* nvm
 
 ## Gulp
 
@@ -110,3 +110,7 @@ gulp compile
 ```
 gulp compile --type production
 ```
+
+## MIT License
+
+Coypright 2015 - 2016 [Blogger Heaven](https://blogger-heaven.com). See [LICENSE](LICENSE) file.
