@@ -11,13 +11,21 @@ Install it with bower (or download it)
 bower install bhwi
 ```
 
-Then include it in your page like that:
+Then include and call it in your page like that:
 
 ```html
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="./path/to/bhwi.css" type="text/css">
+<link rel="stylesheet" href="./path/to/bhwi.min.css" type="text/css">
 <!-- Don't forget to load jQuery before bhwi -->
 <script src="./path/to/bhwi.min.js"></script>
+
+<div id="bhwi"></div>
+
+<script>
+  (function() {
+    new Bhwi('your_user_id', {client_id: 'your_client_id'});
+  }).call(this);
+</script>
 ```
 
 ## Usage
@@ -38,6 +46,10 @@ new Bhwi('your_user_id', {url: 'http://right-url/recent_images/', type: 'bhwi', 
 ```
 
 ### Options
+
+The first parameter (your_user_id) is th ID you get when looking up your Instagram username.
+
+The second parameter is a hash, all available options are described in the table below.
 
 Key                       | Default                     | Others available        | Notes
 ------------------------- | --------------------------- | ----------------------- | --------------------------
