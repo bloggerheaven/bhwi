@@ -47,13 +47,13 @@ new Bhwi('your_user_id', {url: 'http://right-url/recent_images/', type: 'bhwi', 
 
 ### Options
 
-The first parameter (your_user_id) is th ID you get when looking up your Instagram username.
+The first parameter (your_user_id) is th ID you get when looking up your Instagram username (could look like: 2027952057).
 
 The second parameter is a hash, all available options are described in the table below.
 
 Key                       | Default                     | Others available        | Notes
 ------------------------- | --------------------------- | ----------------------- | --------------------------
-client_id                 | '' (empty)                  | 'your client id'        | The client id you get from Instagram API
+client_id                 | '' (empty)                  | 'your client id'        | The client id you get from Instagram API (could look like: 29f9487a7c14f2e46f1e9fa227cb2675)
 dom_element               | 'bhwi'	                    | 'any ID'                | ID of the dom element where the widget will be appended
 form                      | 'timeline'                  | 'slider'                | Type of the widget
 images_number             | 8                           | 'any number'            | Number of images in the timeline (only available for the timeline)
