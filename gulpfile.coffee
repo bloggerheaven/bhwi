@@ -21,7 +21,7 @@ gulp.task 'scss', ->
   gulp.src paths.scss
   .pipe sass()
   .pipe helpers.do 'production', cssnano()
-  .pipe rename extname: '.min.css'
+  .pipe helpers.do 'production', rename extname: '.min.css'
   .pipe gulp.dest paths.finalDest
 
 gulp.task 'ts', ->
