@@ -23,7 +23,7 @@
   "appPath": "src",
   "main": [
     "dist/bhwi.min.js",
-    "dist/bhwi.css"
+    "dist/bhwi.min.css"
   ],
   "ignore": [
     "*",

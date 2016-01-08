@@ -1,5 +1,7 @@
+cssnano = require 'gulp-cssnano'
 gulp = require 'gulp'
 gutil = require 'gulp-util'
+rename = require 'gulp-rename'
 sass = require 'gulp-sass'
 ts = require 'gulp-typescript'
 uglify = require 'gulp-uglify'
@@ -18,6 +20,8 @@ paths =
 gulp.task 'scss', ->
   gulp.src paths.scss
   .pipe sass()
+  .pipe helpers.do 'production', cssnano()
+  .pipe rename extname: '.min.css'
   .pipe gulp.dest paths.finalDest
 
 gulp.task 'ts', ->
