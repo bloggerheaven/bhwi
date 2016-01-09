@@ -5,22 +5,36 @@ See the corresponding [bhwi API](https://github.com/cyrilkyburz/bhwi_proxy).
 
 ## Installation
 
-Install it with bower (or download it)
+### Easiest: jsdelivr 
 
+Thanks to [jsdelivr](https://www.jsdelivr.com/) for hosting it.
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/bhwi/1.0.0/bhwi.min.css type="text/css">
+<script src="https://cdn.jsdelivr.net/bhwi/1.0.0/bhwi.min.js"></script>
 ```
+
+### Easy: bower
+
+```sh
 bower install bhwi
 ```
 
-Then include and call it in your page like that:
+## Example
 
 ```html
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="./path/to/bhwi.min.css" type="text/css">
-<!-- Don't forget to load jQuery before bhwi -->
-<script src="./path/to/bhwi.min.js"></script>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/bhwi/1.0.0/bhwi.min.css" type="text/css">
+
+<!-- Don't forget to load jQuery before bhwi -->
+<script src="https://cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bhwi/1.0.0/bhwi.min.js"></script>
+
+<!-- Insert a element with the id 'bhwi' -->
 <div id="bhwi"></div>
 
+<!-- Initialize bhwi -->
 <script>
   (function() {
     new Bhwi('your_user_id', {client_id: 'your_client_id'});
