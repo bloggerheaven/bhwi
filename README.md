@@ -10,7 +10,7 @@ See the corresponding [bhwi API](https://github.com/cyrilkyburz/bhwi_proxy).
 Thanks to [jsdelivr](https://www.jsdelivr.com/) for hosting it.
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/bhwi/1.0.0/bhwi.min.css type="text/css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/bhwi/1.0.0/bhwi.min.css" type="text/css">
 <script src="https://cdn.jsdelivr.net/bhwi/1.0.0/bhwi.min.js"></script>
 ```
 
