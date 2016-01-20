@@ -1,3 +1,5 @@
+![header](https://raw.githubusercontent.com/cyrilkyburz/bhwi/master/example/example.png)
+
 # bhwi - Blogger Heaven Widget Instagram
 
 A lightweight customizable Instagram widget. Able to handle different APIs.
