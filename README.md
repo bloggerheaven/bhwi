@@ -73,6 +73,7 @@ client_id                 | '' (empty)                  | 'your client id'      
 dom_element               | 'bhwi'	                    | 'any ID'                | ID of the dom element where the widget will be appended
 form                      | 'timeline'                  | 'slider'                | Type of the widget
 images_number             | 8                           | 'any number'            | Number of images in the timeline (only available for the timeline)
+images_spacing            | 6                           | 'any number'            | Number of px between the images in the timeline (only available for the timeline)
 lightbox                  | true                        | false                   | Enables lightbox
 lightbox_background       | false                       | true                    | Experimental (only looks good with high resolution images)
 lightbox_key_navigation   | { previous: 37, next: 39 }  | 'any unicode key code'  | Only supported previous and next

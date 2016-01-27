@@ -10,6 +10,7 @@ class BhwiOptions {
       speed: 4000, // ms (only for silder)
       form: 'timeline', // or slider
       images_number: 8, // only for timeline
+      images_spacing: 6, // in px, only for timeline
       lightbox: true,
       lightbox_key_navigation: {
         previous: 37,
@@ -61,7 +62,7 @@ class BhwiHelper {
     var desc = jQuery('<div>').addClass('bhwi-description').text(text);
     var link = this.buildLink(link_url).addClass('bhwi-author').text('@' + author);
     var time = jQuery('<span>').text(this.shortDateFormat(new Date(created_time * 1000)));
-    var bh_link = this.buildLink('https://www.blogger-heaven.com/').text('blogger-heaven.com');
+    var bh_link = this.buildLink('https://blogger-heaven.com/?utm_source=jacky&utm_medium=Widget&utm_campaign=BHWIWidget').text('blogger-heaven.com');
     var credits = jQuery('<div>').addClass('bhwi-credits').append(bh_link);
     var footer = jQuery('<footer>').append(hr.clone(), credits);
     return [nav, link, hr, desc, footer];
@@ -298,7 +299,7 @@ class BhwiTimeline {
 
   _resizeImages () {
     var images = jQuery(this.bhwi_helper.dom_element).find('.bhwi-image');
-    var size = this.bhwi_helper.dom_element.width() / this.bhwi_options.options.images_number - 6;
+    var size = this.bhwi_helper.dom_element.width() / this.bhwi_options.options.images_number - this.bhwi_options.options.images_spacing;
     images.height(size).width(size);
   }
 
