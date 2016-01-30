@@ -70,6 +70,7 @@ The second parameter is a hash, all available options are described in the table
 Key                       | Default                     | Others available        | Notes
 ------------------------- | --------------------------- | ----------------------- | --------------------------
 client_id                 | '' (empty)                  | 'your client id'        | The client id you get from Instagram API (could look like: 29f9487a7c14f2e46f1e9fa227cb2675)
+credits                   | true                        | false                   | Decide if you wanna show credits (in the footer of the lightbox)
 dom_element               | 'bhwi'	                    | 'any ID'                | ID of the dom element where the widget will be appended
 form                      | 'timeline'                  | 'slider'                | Type of the widget
 images_number             | 8                           | 'any number'            | Number of images in the timeline (only available for the timeline)
