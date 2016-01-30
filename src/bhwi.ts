@@ -18,6 +18,7 @@ class BhwiOptions {
       },
       lightbox_background: false,
       preloading_images: true,
+      credits: true,
       // url: 'api-url' // if type: 'bhwi'
       // client_id: '1234' // if type: 'instagram'
     };
@@ -56,15 +57,19 @@ class BhwiHelper {
     return this.buildLink(link_url).append(this.buildImage(image_id, image_url));
   }
 
-  buildDescription(link_url: string, author: string, text: string, created_time: number) {
+  buildDescription(link_url: string, author: string, text: string, created_time: number, bhwi_options: BhwiOptions) {
     var nav = jQuery('<div>').addClass('bhwi-navigation').append(this.buildLeftAngleIcon(), this.buildRightAngleIcon(), this.buildCrossIcon());
     var hr = jQuery('<hr>');
     var desc = jQuery('<div>').addClass('bhwi-description').text(text);
     var link = this.buildLink(link_url).addClass('bhwi-author').text('@' + author);
     var time = jQuery('<span>').text(this.shortDateFormat(new Date(created_time * 1000)));
-    var bh_link = this.buildLink('https://blogger-heaven.com/?utm_source=jacky&utm_medium=Widget&utm_campaign=BHWIWidget').text('blogger-heaven.com');
-    var credits = jQuery('<div>').addClass('bhwi-credits').append(bh_link);
-    var footer = jQuery('<footer>').append(hr.clone(), credits);
+    if (bhwi_options.options.credits) {
+      var bh_link = this.buildLink('https://blogger-heaven.com/?utm_source=' + window.location.hostname + '&utm_medium=Widget&utm_campaign=BHWIWidget').text('blogger-heaven.com');
+      var credits = jQuery('<div>').addClass('bhwi-credits').append(bh_link);
+      var footer = jQuery('<footer>').append(hr.clone(), credits);
+    } else {
+      var footer = jQuery('<footer>');
+    }
     return [nav, link, hr, desc, footer];
   }
 
@@ -423,7 +428,7 @@ class BhwiLightbox {
       this.dom_element.find('.bhwi-full-background').replaceWith(this.bhwi_helper.buildBackground(bhwi_image.standard));
     }
     this.dom_element.find('.bhwi-image-section').html(this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.id, bhwi_image.standard));
-    this.dom_element.find('.bhwi-text-section').html(this.bhwi_helper.buildDescription(bhwi_image.link, bhwi_image.author, bhwi_image.text, bhwi_image.created_time));
+    this.dom_element.find('.bhwi-text-section').html(this.bhwi_helper.buildDescription(bhwi_image.link, bhwi_image.author, bhwi_image.text, bhwi_image.created_time, this.bhwi_options));
 
     this._addNavigationListener();
 
