@@ -1,7 +1,9 @@
+autoprefixer = require 'autoprefixer'
 cssnano = require 'gulp-cssnano'
 gulp = require 'gulp'
 gutil = require 'gulp-util'
 rename = require 'gulp-rename'
+postcss = require 'gulp-postcss'
 sass = require 'gulp-sass'
 ts = require 'gulp-typescript'
 uglify = require 'gulp-uglify'
@@ -19,7 +21,8 @@ paths =
 
 gulp.task 'scss', ->
   gulp.src paths.scss
-  .pipe sass()
+  .pipe sass 'error', sass.logError
+  .pipe postcss [autoprefixer(browsers: ['last 2 versions'])]
   .pipe helpers.do 'production', cssnano()
   .pipe helpers.do 'production', rename extname: '.min.css'
   .pipe gulp.dest paths.finalDest
