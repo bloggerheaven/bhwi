@@ -12,8 +12,9 @@ See the corresponding [bhwi API](https://github.com/cyrilkyburz/bhwi_proxy).
 Thanks to [jsdelivr](https://www.jsdelivr.com/) for hosting it.
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/bhwi/1.0.1/bhwi.min.css" type="text/css">
-<script src="https://cdn.jsdelivr.net/bhwi/1.0.1/bhwi.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/bhwi/<version>/bhwi.min.css" type="text/css">
+<script src="https://cdn.jsdelivr.net/bhwi/<version>/bhwi.min.js"></script>
+<!-- latest version can be found in the release section -->
 ```
 
 ### Easy: bower
@@ -27,11 +28,11 @@ bower install bhwi
 ```html
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/bhwi/1.0.1/bhwi.min.css" type="text/css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/bhwi/<version>/bhwi.min.css" type="text/css">
 
 <!-- Don't forget to load jQuery before bhwi -->
 <script src="https://cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/bhwi/1.0.1/bhwi.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bhwi/<version>/bhwi.min.js"></script>
 
 <!-- Insert a element with the id 'bhwi' -->
 <div id="bhwi"></div>
