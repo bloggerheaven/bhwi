@@ -59,18 +59,17 @@ class BhwiHelper {
 
   buildDescription(link_url: string, author: string, text: string, created_time: number, bhwi_options: BhwiOptions) {
     var nav = jQuery('<div>').addClass('bhwi-navigation').append(this.buildLeftAngleIcon(), this.buildRightAngleIcon(), this.buildCrossIcon());
-    var hr = jQuery('<hr>');
     var desc = jQuery('<div>').addClass('bhwi-description').text(text);
     var link = this.buildLink(link_url).addClass('bhwi-author').text('@' + author);
     var time = jQuery('<span>').text(this.shortDateFormat(new Date(created_time * 1000)));
     if (bhwi_options.options.credits) {
       var bh_link = this.buildLink('https://blogger-heaven.com/?utm_source=' + window.location.hostname + '&utm_medium=Widget&utm_campaign=BHWIWidget').text('blogger-heaven.com');
       var credits = jQuery('<div>').addClass('bhwi-credits').append(bh_link);
-      var footer = jQuery('<footer>').append(hr.clone(), credits);
+      var footer = jQuery('<footer>').append(credits);
     } else {
       var footer = jQuery('<footer>');
     }
-    return [nav, link, hr, desc, footer];
+    return [nav, link, desc, footer];
   }
 
   buildBackground(image_url: string) {
