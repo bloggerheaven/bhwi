@@ -9,7 +9,12 @@ class BhwiOptions {
       type: 'instagram', // or bhwi
       speed: 4000, // ms (only for silder)
       form: 'timeline', // or slider
-      images_number: 8, // only for timeline
+      images_number: {
+        small: 3,
+        medium: 5,
+        large: 8,
+        initial: 10
+      }, // only for timeline
       images_spacing: 6, // in px, only for timeline
       lightbox: true,
       lightbox_key_navigation: {
@@ -19,6 +24,11 @@ class BhwiOptions {
       lightbox_background: false,
       preloading_images: true,
       credits: true,
+      screen_widths: {
+        small: 400,
+        medium: 700,
+        large: 900,
+      }
       // url: 'api-url' // if type: 'bhwi'
       // client_id: '1234' // if type: 'instagram'
     };
@@ -276,13 +286,42 @@ class BhwiSlider {
   };
 }
 
+class BhwiTimelineHelper {
+  bhwi_helper: BhwiHelper;
+  bhwi_options: BhwiOptions;
+
+  constructor(bhwi_helper: BhwiHelper, bhwi_options: BhwiOptions) {
+    this.bhwi_helper = bhwi_helper;
+    this.bhwi_options = bhwi_options;
+  }
+
+  images_number_for_width() {
+    var width = this.bhwi_helper.width();
+    if (width <= this.bhwi_options.options.screen_widths.small) {
+      return this.bhwi_options.options.images_number.small;
+    }
+
+    if (width <= this.bhwi_options.options.screen_widths.medium) {
+      return this.bhwi_options.options.images_number.medium;
+    }
+
+    if (width <= this.bhwi_options.options.screen_widths.large) {
+      return this.bhwi_options.options.images_number.large;
+    }
+
+    return this.bhwi_options.options.images_number.initial;
+  }
+}
+
 class BhwiTimeline {
   bhwi_helper: BhwiHelper;
+  bhwi_timeline_helper: BhwiTimelineHelper;
   bhwi_images: BhwiImages;
   bhwi_options: BhwiOptions;
 
-  constructor(bhwi_helper: BhwiHelper, bhwi_images: BhwiImages, bhwi_options: BhwiOptions) {
+  constructor(bhwi_helper: BhwiHelper, bhwi_images: BhwiImages, bhwi_options: BhwiOptions, bhwi_timeline_helper: BhwiTimelineHelper) {
     this.bhwi_helper = bhwi_helper;
+    this.bhwi_timeline_helper = bhwi_timeline_helper;
     this.bhwi_images = bhwi_images;
     this.bhwi_options = bhwi_options;
 
@@ -297,13 +336,13 @@ class BhwiTimeline {
     jQuery.each(this.bhwi_images.images, (index: number, bhwi_image: BhwiImage) => {
       var image_wrapper = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.id, bhwi_image.low);
       this.bhwi_helper.append(image_wrapper);
-      if (index == (this.bhwi_options.options.images_number - 1)) return false;
+      if (index == (this.bhwi_timeline_helper.images_number_for_width() - 1)) return false;
     });
   }
 
   _resizeImages () {
     var images = jQuery(this.bhwi_helper.dom_element).find('.bhwi-image');
-    var size = this.bhwi_helper.dom_element.width() / this.bhwi_options.options.images_number - this.bhwi_options.options.images_spacing;
+    var size = this.bhwi_helper.dom_element.width() / this.bhwi_timeline_helper.images_number_for_width() - this.bhwi_options.options.images_spacing;
     images.height(size).width(size);
   }
 
@@ -315,16 +354,17 @@ class BhwiTimeline {
 class BhwiLightbox {
   bhwi_helper: BhwiHelper;
   bhwi_options: BhwiOptions;
+  bhwi_timeline_helper: BhwiTimelineHelper;
   bhwi_images: BhwiImages;
   current_image: BhwiImage;
   total_images: number;
   dom_element: any;
 
-  constructor(bhwi_helper: BhwiHelper, bhwi_options: BhwiOptions, bhwi_images: BhwiImages) {
+  constructor(bhwi_helper: BhwiHelper, bhwi_options: BhwiOptions, bhwi_images: BhwiImages, bhwi_timeline_helper: BhwiTimelineHelper) {
     this.bhwi_helper = bhwi_helper;
     this.bhwi_options = bhwi_options;
     this.bhwi_images = bhwi_images;
-    this.total_images = this.bhwi_options.options.form == 'timeline' ? this.bhwi_options.options.images_number : this.bhwi_images.images.length;
+    this.total_images = this.bhwi_options.options.form == 'timeline' ? bhwi_timeline_helper.images_number_for_width() : this.bhwi_images.images.length;
     this._buildLightbox();
   }
 
@@ -514,11 +554,13 @@ class Bhwi {
   bhwi_images: BhwiImages;
   bhwi_silder: BhwiSlider;
   bhwi_timeline: BhwiTimeline;
+  bhwi_timeline_helper: BhwiTimelineHelper;
 
   constructor(id: number, options: any) {
     this._basicVaildation(id, options);
     this.bhwi_options = new BhwiOptions(options);
     this.bhwi_helper = new BhwiHelper(this.bhwi_options.options.dom_element);
+    this.bhwi_timeline_helper = new BhwiTimelineHelper(this.bhwi_helper, this.bhwi_options);
     this.bhwi_user = new BhwiUser(id, this.bhwi_options);
     this.bhwi_images = new BhwiImages;
     this._callApi();
@@ -529,7 +571,7 @@ class Bhwi {
   };
 
   _initBhwiTimeline = () => {
-    this.bhwi_timeline = new BhwiTimeline(this.bhwi_helper, this.bhwi_images, this.bhwi_options)
+    this.bhwi_timeline = new BhwiTimeline(this.bhwi_helper, this.bhwi_images, this.bhwi_options, this.bhwi_timeline_helper)
   };
 
   _decideInit = function () {
@@ -541,7 +583,7 @@ class Bhwi {
         this._initBhwiTimeline();
     }
     if (this.bhwi_options.options.lightbox) {
-      new BhwiLightbox(this.bhwi_helper, this.bhwi_options, this.bhwi_images)
+      new BhwiLightbox(this.bhwi_helper, this.bhwi_options, this.bhwi_images, this.bhwi_timeline_helper)
     }
   };
 
