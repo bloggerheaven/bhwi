@@ -11,6 +11,8 @@ See the corresponding [bhwi API](https://github.com/cyrilkyburz/bhwi_proxy).
 
 Thanks to [jsdelivr](https://www.jsdelivr.com/) for hosting it.
 
+Current version can be found here: [https://www.jsdelivr.com/?query=bhwi](https://www.jsdelivr.com/?query=bhwi)
+
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/bhwi/<version>/bhwi.min.css" type="text/css">
 <script src="https://cdn.jsdelivr.net/bhwi/<version>/bhwi.min.js"></script>
