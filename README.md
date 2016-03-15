@@ -68,21 +68,22 @@ The first parameter (your_user_id) is th ID you get when looking up your Instagr
 
 The second parameter is a hash, all available options are described in the table below.
 
-Key                       | Default                     | Others available        | Notes
-------------------------- | --------------------------- | ----------------------- | --------------------------
-client_id                 | '' (empty)                  | 'your client id'        | The client id you get from Instagram API (could look like: 29f9487a7c14f2e46f1e9fa227cb2675)
-credits                   | true                        | false                   | Decide if you wanna show credits (in the footer of the lightbox)
-dom_element               | 'bhwi'	                    | 'any ID'                | ID of the dom element where the widget will be appended
-form                      | 'timeline'                  | 'slider'                | Type of the widget
-images_number             | 8                           | 'any number'            | Number of images in the timeline (only available for the timeline)
-images_spacing            | 6                           | 'any number'            | Number of px between the images in the timeline (only available for the timeline)
-lightbox                  | true                        | false                   | Enables lightbox
-lightbox_background       | false                       | true                    | Experimental (only looks good with high resolution images)
-lightbox_key_navigation   | { previous: 37, next: 39 }  | 'any unicode key code'  | Only supported previous and next
-preloading_images         | true                        | false                   | Preloads images for slider & lightbox
-speed                     | 4000  (ms)                  | 'any number' (ms)       | Time per slide (only available for the silder)
-type                      | 'instagram'                 | 'bhwi_proxy'            | Type of API
-url                       | '' (empty)                  | 'bhwi proxy (cdn) url'  | Url of bhwi proxy (cdn) (only required if type 'bhwi_proxy')
+Key                       | Default                                           | Others available                  | Notes
+------------------------- | ------------------------------------------------- | --------------------------------- | ---------------------
+client_id                 | '' (empty)                                        | 'your client id'                  | The client id you get from Instagram API (could look like: 29f9487a7c14f2e46f1e9fa227cb2675)
+credits                   | true                                              | false                             | Decide if you wanna show credits (in the footer of the lightbox)
+dom_element               | 'bhwi'	                                          | 'any ID'                          | ID of the dom element where the widget will be appended
+form                      | 'timeline'                                        | 'slider'                          | Type of the widget
+images_number             | {xs: 3, sm: 5, md: 7, lg: 9, xl: 11}              | 'any number' for a screen         | Number of images, depending on screensize (only affecting the build process, not resizing) in the timeline (only available for the timeline)
+images_spacing            | 6                                                 | 'any number'                      | Number of px between the images in the timeline (only available for the timeline)
+lightbox                  | true                                              | false                             | Enables lightbox
+lightbox_background       | false                                             | true                              | Experimental (only looks good with high resolution images)
+lightbox_key_navigation   | { previous: 37, next: 39 }                        | 'any unicode key code'            | Only supported previous and next
+preloading_images         | true                                              | false                             | Preloads images for slider & lightbox
+screen_widths             | { xs: 380, sm: 544, md: 768, lg: 992, xl: 1200 }  | 'any pixel number' for a screen   | The diffrent screen sizes, taken from bootstrap 4
+speed                     | 4000  (ms)                                        | 'any number' (ms)                 | Time per slide (only available for the silder)
+type                      | 'instagram'                                       | 'bhwi_proxy'                      | Type of API
+url                       | '' (empty)                                        | 'bhwi proxy (cdn) url'            | Url of bhwi proxy (cdn) (only required if type 'bhwi_proxy')
 
 ## Example
 

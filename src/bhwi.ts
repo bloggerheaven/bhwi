@@ -10,10 +10,11 @@ class BhwiOptions {
       speed: 4000, // ms (only for silder)
       form: 'timeline', // or slider
       images_number: {
-        small: 3,
-        medium: 5,
-        large: 8,
-        initial: 10
+        xs: 3, // extra small screen / phone
+        sm: 5, // small screen / phone
+        md: 7, // medium screen / tablet
+        lg: 9, // large screen / desktop
+        xl: 11 // extra large screen / wide desktop
       }, // only for timeline
       images_spacing: 6, // in px, only for timeline
       lightbox: true,
@@ -25,9 +26,11 @@ class BhwiOptions {
       preloading_images: true,
       credits: true,
       screen_widths: {
-        small: 400,
-        medium: 700,
-        large: 900,
+        xs: 380, // extra small screen / phone
+        sm: 544, // small screen / phone
+        md: 768, // medium screen / tablet
+        lg: 992, // large screen / desktop
+        xl: 1200 // extra large screen / wide desktop
       }
       // url: 'api-url' // if type: 'bhwi'
       // client_id: '1234' // if type: 'instagram'
@@ -289,27 +292,33 @@ class BhwiSlider {
 class BhwiTimelineHelper {
   bhwi_helper: BhwiHelper;
   bhwi_options: BhwiOptions;
+  images_number: number;
 
   constructor(bhwi_helper: BhwiHelper, bhwi_options: BhwiOptions) {
     this.bhwi_helper = bhwi_helper;
     this.bhwi_options = bhwi_options;
+    this.images_number = this.images_number_for_width()
   }
 
   images_number_for_width() {
     var width = this.bhwi_helper.width();
-    if (width <= this.bhwi_options.options.screen_widths.small) {
-      return this.bhwi_options.options.images_number.small;
+    if (width <= this.bhwi_options.options.screen_widths.xs) {
+      return this.bhwi_options.options.images_number.xs;
     }
 
-    if (width <= this.bhwi_options.options.screen_widths.medium) {
-      return this.bhwi_options.options.images_number.medium;
+    if (width <= this.bhwi_options.options.screen_widths.sm) {
+      return this.bhwi_options.options.images_number.sm;
     }
 
-    if (width <= this.bhwi_options.options.screen_widths.large) {
-      return this.bhwi_options.options.images_number.large;
+    if (width <= this.bhwi_options.options.screen_widths.md) {
+      return this.bhwi_options.options.images_number.md;
     }
 
-    return this.bhwi_options.options.images_number.initial;
+    if (width <= this.bhwi_options.options.screen_widths.lg) {
+      return this.bhwi_options.options.images_number.lg;
+    }
+
+    return this.bhwi_options.options.images_number.xl;
   }
 }
 
@@ -336,13 +345,13 @@ class BhwiTimeline {
     jQuery.each(this.bhwi_images.images, (index: number, bhwi_image: BhwiImage) => {
       var image_wrapper = this.bhwi_helper.buildSlide(bhwi_image.link, bhwi_image.id, bhwi_image.low);
       this.bhwi_helper.append(image_wrapper);
-      if (index == (this.bhwi_timeline_helper.images_number_for_width() - 1)) return false;
+      if (index == (this.bhwi_timeline_helper.images_number - 1)) return false;
     });
   }
 
   _resizeImages () {
     var images = jQuery(this.bhwi_helper.dom_element).find('.bhwi-image');
-    var size = this.bhwi_helper.dom_element.width() / this.bhwi_timeline_helper.images_number_for_width() - this.bhwi_options.options.images_spacing;
+    var size = this.bhwi_helper.dom_element.width() / this.bhwi_timeline_helper.images_number - this.bhwi_options.options.images_spacing;
     images.height(size).width(size);
   }
 
@@ -364,7 +373,7 @@ class BhwiLightbox {
     this.bhwi_helper = bhwi_helper;
     this.bhwi_options = bhwi_options;
     this.bhwi_images = bhwi_images;
-    this.total_images = this.bhwi_options.options.form == 'timeline' ? bhwi_timeline_helper.images_number_for_width() : this.bhwi_images.images.length;
+    this.total_images = this.bhwi_options.options.form == 'timeline' ? bhwi_timeline_helper.images_number : this.bhwi_images.images.length;
     this._buildLightbox();
   }
 
