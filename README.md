@@ -133,6 +133,18 @@ gulp compile
 gulp compile --type production
 ```
 
+## Contributing
+
+Bug reports and pull requests are welcome on GitHub at [https://github.com/cyrilkyburz/bhwi]. This project is intended 
+to be a safe, welcoming space for collaboration, and contributors are expected to adhere to
+the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+
+## Contact
+
+For more information on the bhwi, please check out
+[https://github.com/cyrilkyburz/bhwi](https://github.com/cyrilkyburz/bhwi)
+or contact [hello@blogger-heaven.com](mailto:hello@blogger-heaven.com).
+
 ## MIT License
 
 Coypright 2015 - 2016 [Blogger Heaven](https://blogger-heaven.com). See [LICENSE](LICENSE) file.
