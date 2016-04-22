@@ -92,8 +92,10 @@
         border-bottom: 1px solid #ccc;
       }
       .bhwi-description {
-        margin: 20px;
         line-height: 20px;
+        margin: 20px;
+        max-height: 300px;
+        overflow: scroll;
         word-break: break-all;
       }
       footer {
