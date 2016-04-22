@@ -5,14 +5,14 @@
   a {
     height: 100%;
     display: block;
-    div {
+    .bhwi-image {
       background-size: cover !important;
       max-height: 100%;
       max-width: 100%;
       vertical-align: middle;
     }
   }
-  &.bhwi-slider, &.bhwi-timeline {
+  &.bhwi-slider, &.bhwi-timeline-horizontal, &.bhwi-timeline-vertical {
     overflow: hidden;
     display: flex;
     justify-content: space-around;
@@ -28,6 +28,16 @@
       .bhwi-image {
         width: 100%;
         height: 100%;
+      }
+    }
+  }
+  &.bhwi-timeline-vertical {
+    flex-direction: column;
+
+    a {
+      .bhwi-image {
+        padding-top: 100%;
+        width:100%;
       }
     }
   }
