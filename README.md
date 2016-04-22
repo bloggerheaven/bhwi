@@ -96,6 +96,10 @@ cd bhwi/example
 Open index.html in a browser
 ```
 
+## FAQ
+
+* bhwi slider is not visible? - You have to specify yourself a height & width. 
+
 # Development
 
 ## Requirements 

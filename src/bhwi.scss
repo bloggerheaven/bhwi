@@ -18,11 +18,10 @@
     justify-content: space-around;
   }
   &.bhwi-slider {
-    height: 200px;
-    line-height: 200px;
+    position: relative;
     a {
-      height: 200px;
-      width: 200px;
+      height: 100%;
+      width: 100%;
       position: absolute;
       left: 0;
       .bhwi-image {
