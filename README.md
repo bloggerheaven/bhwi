@@ -99,7 +99,7 @@ Open index.html in a browser
 
 ## Requirements 
 
-* nvm
+* [nvm](https://github.com/creationix/nvm)
 
 ## Setup
 
