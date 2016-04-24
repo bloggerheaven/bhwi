@@ -18,11 +18,10 @@
     justify-content: space-around;
   }
   &.bhwi-slider {
-    height: 200px;
-    line-height: 200px;
+    position: relative;
     a {
-      height: 200px;
-      width: 200px;
+      height: 100%;
+      width: 100%;
       position: absolute;
       left: 0;
       .bhwi-image {
@@ -92,8 +91,10 @@
         border-bottom: 1px solid #ccc;
       }
       .bhwi-description {
-        margin: 20px;
         line-height: 20px;
+        margin: 20px;
+        max-height: 300px;
+        overflow: scroll;
         word-break: break-all;
       }
       footer {
