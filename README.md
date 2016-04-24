@@ -84,6 +84,7 @@ lightbox_key_navigation   | { previous: 37, next: 39 }                        | 
 preloading_images         | true                                              | false                             | Preloads images for slider & lightbox
 screen_widths             | { xs: 380, sm: 544, md: 768, lg: 992, xl: 1200 }  | 'any pixel number' for a screen   | The diffrent screen sizes, taken from bootstrap 4
 speed                     | 4000  (ms)                                        | 'any number' (ms)                 | Time per slide (only available for the silder)
+timeline_direction        | 'horizontal'                                      | 'vertical'                        | Specify the direction of the timeline (only for timeline)
 type                      | 'instagram'                                       | 'bhwi_proxy'                      | Type of API
 url                       | '' (empty)                                        | 'bhwi proxy (cdn) url'            | Url of bhwi proxy (cdn) (only required if type 'bhwi_proxy')
 

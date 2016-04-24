@@ -16,6 +16,7 @@ module Bhwi {
         type: 'instagram', // or bhwi
         speed: 4000, // ms (only for silder)
         form: 'timeline', // or slider
+        timeline_direction: 'horizontal', // or 'vertical', only for timeline
         images_number: {
           xs: 3, // extra small screen / phone
           sm: 5, // small screen / phone
@@ -359,11 +360,14 @@ module Bhwi {
       this.bhwi_images = bhwi_images;
       this.bhwi_options = bhwi_options;
 
-      this.bhwi_helper.dom_element.addClass('bhwi-timeline');
+      this.bhwi_helper.dom_element.addClass('bhwi-timeline-' + bhwi_options.options.timeline_direction);
 
       this._setAllImages();
-      this._resizeImages();
-      this._responsiveImages();
+
+      if (bhwi_options.options.timeline_direction === 'horizontal') {
+        this._resizeImages();
+        this._responsiveImages();
+      }
     }
 
     _setAllImages() {
