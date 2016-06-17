@@ -13,7 +13,7 @@ module Bhwi {
     constructor(bhwi_options:any) {
       var default_options = {
         dom_element: 'bhwi', // any id
-        type: 'instagram', // or bhwi
+        type: 'instagram', // or bhwi or bhwi-media
         speed: 4000, // ms (only for silder)
         form: 'timeline', // or slider
         timeline_direction: 'horizontal', // or 'vertical', only for timeline
@@ -40,7 +40,7 @@ module Bhwi {
           lg: 992, // large screen / desktop
           xl: 1200 // extra large screen / wide desktop
         }
-        // url: 'api-url' // if type: 'bhwi'
+        // url: 'api-url' // if type: 'bhwi' or bhwi-media
         // client_id: '1234' // if type: 'instagram'
       };
 
@@ -577,11 +577,13 @@ module Bhwi {
 
   class BhwiUser {
     id:number;
+    bhwi_options:BhwiOptions;
     url:string;
 
     constructor(id:number, bhwi_options:BhwiOptions) {
       this.id = id;
-      if ('bhwi' === bhwi_options.options.type) {
+      this.bhwi_options = bhwi_options;
+      if ('bhwi' === bhwi_options.options.type || 'bhwi-media' === bhwi_options.options.type) {
         this.url = this._buildBhwiUrl(bhwi_options.options.url);
       } else {
         this.url = this._buildInstagramUrl(bhwi_options.options.client_id);
@@ -594,6 +596,14 @@ module Bhwi {
 
     _buildBhwiUrl(url:string) {
       return url + this.id
+    }
+
+    _extractData(json:any) {
+      if ('bhwi-media' === this.bhwi_options.options.type) {
+        return json.items;
+      } else {
+        return json.data;
+      }
     }
   }
 
@@ -639,7 +649,7 @@ module Bhwi {
 
     _callApi() {
       jQuery.getJSON(this.bhwi_user.url).done((insta_posts) => {
-        jQuery.each(insta_posts.data, (index, insta_posts) => {
+        jQuery.each(this.bhwi_user._extractData(insta_posts), (index, insta_posts) => {
           this.bhwi_images.addBuildImage(insta_posts.link, insta_posts.images.standard_resolution.url,
             insta_posts.images.low_resolution.url, insta_posts.images.thumbnail.url, insta_posts.user.username,
             this.bhwi_helper.nullTry (insta_posts.caption, 'text'), insta_posts.created_time);
