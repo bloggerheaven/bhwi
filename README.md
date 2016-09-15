@@ -1,9 +1,9 @@
-![header](https://raw.githubusercontent.com/cyrilkyburz/bhwi/master/example/example.png)
+![header](https://raw.githubusercontent.com/bloggerheaven/bhwi/master/example/example.png)
 
 # bhwi - Blogger Heaven Widget Instagram
 
 A lightweight customizable Instagram widget. Able to handle different APIs.
-See the corresponding [bhwi API](https://github.com/cyrilkyburz/bhwi_proxy).
+See the corresponding [bhwi API](https://github.com/bloggerheaven/bhwi_proxy).
 
 ## Installation
 
@@ -91,7 +91,7 @@ url                       | '' (empty)                                        | 
 ## Example
 
 ```
-git clone git@github.com:cyrilkyburz/bhwi.git
+git clone git@github.com:bloggerheaven/bhwi.git
 cd bhwi/example
 Open index.html in a browser
 ```
@@ -109,7 +109,7 @@ Open index.html in a browser
 ## Setup
 
 ```
-git clone git@github.com:cyrilkyburz/bhwi.git
+git clone git@github.com:bloggerheaven/bhwi.git
 cd bhwi
 npm install bower gulp tsd -g
 npm install
@@ -140,14 +140,14 @@ gulp compile --type production
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at [https://github.com/cyrilkyburz/bhwi]. This project is intended 
+Bug reports and pull requests are welcome on GitHub at [https://github.com/bloggerheaven/bhwi](https://github.com/bloggerheaven/bhwi). This project is intended 
 to be a safe, welcoming space for collaboration, and contributors are expected to adhere to
 the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## Contact
 
 For more information on the bhwi, please check out
-[https://github.com/cyrilkyburz/bhwi](https://github.com/cyrilkyburz/bhwi)
+[https://github.com/bloggerheaven/bhwi](https://github.com/bloggerheaven/bhwi)
 or contact [hello@blogger-heaven.com](mailto:hello@blogger-heaven.com).
 
 ## MIT License

@@ -18,7 +18,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:cyrilkyburz/bhwi.git"
+    "url": "git@github.com:bloggerheaven/bhwi.git"
   },
   "appPath": "src",
   "main": [
