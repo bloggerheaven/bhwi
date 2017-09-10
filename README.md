@@ -14,8 +14,8 @@ Thanks to [jsdelivr](https://www.jsdelivr.com/) for hosting it.
 Current version can be found here: [https://www.jsdelivr.com/?query=bhwi](https://www.jsdelivr.com/?query=bhwi)
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/bhwi/<version>/bhwi.min.css" type="text/css">
-<script src="https://cdn.jsdelivr.net/bhwi/<version>/bhwi.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bloggerheaven/bhwi@<version>/dist/bhwi.min.css" type="text/css">
+<script src="https://cdn.jsdelivr.net/gh/bloggerheaven/bhwi@<version>/dist/bhwi.min.js"></script>
 <!-- latest version can be found in the release section -->
 ```
 
@@ -30,11 +30,11 @@ bower install bhwi
 ```html
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/bhwi/<version>/bhwi.min.css" type="text/css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bloggerheaven/bhwi@<version>/dist/bhwi.min.css" type="text/css">
 
 <!-- Don't forget to load jQuery before bhwi -->
-<script src="https://cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/bhwi/<version>/bhwi.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@2.1.4/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/bloggerheaven/bhwi@<version>/dist/bhwi.min.js"></script>
 
 <!-- Insert a element with the id 'bhwi' -->
 <div id="bhwi"></div>
